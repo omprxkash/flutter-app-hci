@@ -1,0 +1,97 @@
+rules_version = '2';
+
+// Security rules for MedQuiz HCI.
+//
+// Two roles: patient and doctor. Patients see only their own data; doctors
+// see their assigned patients' data. Reviews are write-once by doctors and
+// readable by both parties.
+//
+// Test these rules with the Firestore emulator:
+//   firebase emulators:start --only firestore
+//   npm test --prefix firestore-tests
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ---------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function userDoc(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data;
+    }
+
+    function isDoctor() {
+      return isSignedIn() && userDoc(request.auth.uid).role == 'doctor';
+    }
+
+    function isPatient() {
+      return isSignedIn() && userDoc(request.auth.uid).role == 'patient';
+    }
+
+    function isPatientsDoctor(patientId) {
+      return isDoctor() && userDoc(patientId).doctorId == request.auth.uid;
+    }
+
+    // ---------- users -----------------------------------------------------
+    match /users/{userId} {
+      allow read: if isSelf(userId) || isPatientsDoctor(userId);
+      allow create: if isSelf(userId);
+      allow update: if isSelf(userId);
+      allow delete: if false; // never delete; soft-archive instead
+
+      // Per-patient assignment sub-collection
+      match /assignments/{assignmentId} {
+        allow read: if isSelf(userId) || isPatientsDoctor(userId);
+        allow create, update: if isPatientsDoctor(userId);
+        allow delete: if false;
+      }
+    }
+
+    // ---------- quizzes ---------------------------------------------------
+    match /quizzes/{quizId} {
+      // Anyone signed in can read quizzes (presets + their doctor's).
+      allow read: if isSignedIn();
+
+      // Only doctors create/update their own quizzes. Presets (createdBy ==
+      // 'system') are never writable from the client.
+      allow create: if isDoctor()
+                    && request.resource.data.createdBy == request.auth.uid
+                    && request.resource.data.isPreset == false;
+      allow update: if isDoctor()
+                    && resource.data.createdBy == request.auth.uid
+                    && resource.data.isPreset == false;
+      allow delete: if isDoctor()
+                    && resource.data.createdBy == request.auth.uid
+                    && resource.data.isPreset == false;
+    }
+
+    // ---------- responses -------------------------------------------------
+    match /responses/{responseId} {
+      // Patient can read their own response; their doctor can too.
+      allow read: if isSignedIn() && (
+        resource.data.patientId == request.auth.uid ||
+        resource.data.doctorId == request.auth.uid
+      );
+      // Patients create responses against their own id.
+      allow create: if isPatient()
+                    && request.resource.data.patientId == request.auth.uid;
+      allow update, delete: if false; // responses are immutable once submitted
+
+      // Reviews sub-collection
+      match /reviews/{reviewId} {
+        allow read: if isSignedIn() && (
+          get(/databases/$(database)/documents/responses/$(responseId)).data.patientId == request.auth.uid ||
+          get(/databases/$(database)/documents/responses/$(responseId)).data.doctorId == request.auth.uid
+        );
+        allow create, update: if isDoctor()
+                              && request.resource.data.doctorId == request.auth.uid;
+        allow delete: if false;
+      }
+    }
+  }
+}

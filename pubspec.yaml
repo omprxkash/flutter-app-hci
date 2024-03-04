@@ -1,0 +1,52 @@
+name: medquiz_hci
+description: A clinical questionnaire app. Doctors assign PHQ-9, GAD-7, MMSE, or custom quizzes; patients take them on phone; doctor reviews and scores on web.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.10.0 <4.0.0'
+  flutter: '>=3.37.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^3.3.1
+
+  # Routing
+  go_router: ^17.2.3
+
+  # Firebase
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
+
+  # UI / charts
+  fl_chart: ^1.2.0
+  google_fonts: ^6.2.1
+
+  # Utilities
+  intl: ^0.20.0
+  uuid: ^4.4.2
+  equatable: ^2.0.5
+  collection: ^1.18.0
+
+  # Logging
+  logger: ^2.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.4
+  fake_cloud_firestore: ^4.1.1
+  firebase_auth_mocks: ^0.15.2
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  # assets: add entries here when real images/icons are needed
