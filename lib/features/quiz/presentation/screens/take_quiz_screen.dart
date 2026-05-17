@@ -14,7 +14,6 @@ import '../../domain/entities/assignment.dart';
 import '../../domain/entities/question.dart';
 import '../../domain/entities/quiz.dart';
 import '../../domain/entities/response.dart';
-import '../../domain/usecases/score_response.dart';
 import '../providers/quiz_providers.dart';
 import '../widgets/question_card.dart';
 

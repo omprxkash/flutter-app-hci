@@ -230,7 +230,7 @@ class _PendingReviews extends ConsumerWidget {
 }
 
 class _PendingReviewCard extends ConsumerWidget {
-  const _PendingReviewCard({required this.response, super.key});
+  const _PendingReviewCard({required this.response});
 
   final QuizResponse response;
 
