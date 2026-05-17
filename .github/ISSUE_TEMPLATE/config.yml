@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Quick question or discussion
+    url: https://github.com/omprxkash/flutter-app-hci/discussions
+    about: For open-ended questions or feedback that doesn't fit bug/feature, start a discussion.

@@ -1,0 +1,72 @@
+name: medquiz_hci
+description: A clinical questionnaire app. Doctors assign PHQ-9, GAD-7, MMSE, or custom quizzes; patients take them on phone; doctor reviews and scores on web.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.27.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^3.3.1
+
+  # Routing
+  go_router: ^17.2.3
+
+  # Firebase
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
+  cloud_functions: ^6.3.1
+  firebase_storage: ^13.4.1
+
+  # Forms
+  flutter_form_builder: ^10.3.0+2
+  form_builder_validators: ^11.0.0
+
+  # UI / charts
+  fl_chart: ^1.2.0
+  flutter_svg: ^2.0.10+1
+  google_fonts: ^6.2.1
+
+  # Persistence
+  shared_preferences: ^2.3.0
+
+  # Utilities
+  intl: ^0.20.0
+  uuid: ^4.4.2
+  equatable: ^2.0.5
+  collection: ^1.18.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+
+  # Networking (cloud functions / future REST endpoints)
+  dio: ^5.5.0+1
+
+  # Logging
+  logger: ^2.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.4
+  build_runner: ^2.4.11
+  freezed: ^3.2.5
+  json_serializable: ^6.8.0
+  fake_cloud_firestore: ^4.1.1
+  firebase_auth_mocks: ^0.15.2
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/icons/

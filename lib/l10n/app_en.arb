@@ -1,0 +1,93 @@
+{
+  "@@locale": "en",
+
+  "appName": "MedQuiz",
+  "@appName": { "description": "Public app name shown in the title bar." },
+
+  "welcome": "Welcome",
+  "chooseYourRole": "Choose your role to continue.",
+  "imAPatient": "I'm a patient",
+  "imAPatientSubtitle": "Take assessments my doctor has assigned.",
+  "imADoctor": "I'm a doctor",
+  "imADoctorSubtitle": "Assign and review patient assessments.",
+
+  "patientSignIn": "Patient sign in",
+  "signInWithPhone": "Sign in with your phone number",
+  "wellTextYouCode": "We'll text you a 6-digit code to verify it's you.",
+  "phoneNumber": "Phone number",
+  "sendCode": "Send code",
+  "noAccountRegister": "Don't have an account? Register",
+
+  "createAccount": "Create account",
+  "tellUsAboutYourself": "Tell us about yourself",
+  "doctorNeedsThis": "Your doctor needs this to assign the right assessments.",
+  "fullName": "Full name",
+  "age": "Age",
+  "gender": "Gender",
+  "continueButton": "Continue",
+
+  "verifyCode": "Verify code",
+  "enterTheCode": "Enter the 6-digit code",
+  "sentTo": "Sent to {phone}",
+  "@sentTo": { "placeholders": { "phone": { "type": "String" } } },
+  "verify": "Verify",
+  "resendInSeconds": "Resend code in {seconds}s",
+  "@resendInSeconds": { "placeholders": { "seconds": { "type": "int" } } },
+  "resendCode": "Resend code",
+
+  "doctorSignIn": "Doctor sign in",
+  "signInClinician": "Sign in to your clinician account",
+  "useEmailRegistered": "Use the email your clinic registered with.",
+  "email": "Email",
+  "password": "Password",
+  "signIn": "Sign in",
+
+  "home": "Home",
+  "hiThere": "Hi, {name}",
+  "@hiThere": { "placeholders": { "name": { "type": "String" } } },
+  "noPendingAssessments": "You have no pending assessments. Great job!",
+  "youHavePending": "You have {count} pending {count, plural, one{assessment} other{assessments}}.",
+  "@youHavePending": { "placeholders": { "count": { "type": "int" } } },
+  "recentlyCompleted": "Recently completed",
+  "allCaughtUp": "All caught up",
+
+  "questionXOfY": "Question {current} of {total}",
+  "@questionXOfY": {
+    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "back": "Back",
+  "next": "Next",
+  "submit": "Submit",
+
+  "submittedThanks": "Thank you",
+  "responsesSent": "Your responses have been submitted to your doctor.",
+  "backToHome": "Back to home",
+
+  "dashboard": "Dashboard",
+  "pendingReviews": "Pending reviews",
+  "activeAssignments": "Active assignments",
+  "patients": "Patients",
+  "awaitingReview": "Awaiting your review",
+  "yourPatients": "Your patients",
+  "noPendingReviews": "No pending reviews.",
+
+  "reviewResponse": "Review response",
+  "finalScoreOverride": "Final score (override)",
+  "recommendFollowUp": "Recommend follow-up",
+  "noFollowUp": "No follow-up",
+  "in1Week": "In 1 week",
+  "in2Weeks": "In 2 weeks",
+  "in1Month": "In 1 month",
+  "in3Months": "In 3 months",
+  "clinicalNotes": "Clinical notes",
+  "saveReview": "Save review",
+
+  "quizLibrary": "Quiz library",
+  "newQuiz": "New quiz",
+  "noQuizzes": "No quizzes",
+  "createCustomOrAssign": "Create a custom quiz or assign one from the preset library.",
+
+  "signOut": "Sign out",
+  "tryAgain": "Try again",
+  "somethingWentWrong": "Something went wrong."
+}
