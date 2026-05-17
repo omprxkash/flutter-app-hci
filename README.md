@@ -1,7 +1,7 @@
 # MedQuiz
 
 [![CI](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml)
-[![Flutter](https://img.shields.io/badge/Flutter-3.35+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.37+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A Flutter app for running psychiatric screening questionnaires between doctors and their patients — PHQ-9, GAD-7, MMSE, or custom ones the doctor builds.
@@ -67,7 +67,7 @@ Quizzes available out of the box: PHQ-9, GAD-7, MMSE. The doctor can also build 
 
 ## Run it
 
-You need [Flutter 3.35+](https://docs.flutter.dev/get-started/install).
+You need [Flutter 3.37+](https://docs.flutter.dev/get-started/install).
 
 ```bash
 git clone https://github.com/omprxkash/flutter-app-hci.git
@@ -105,7 +105,7 @@ Scoring follows published rubrics. Covered by unit tests in `test/unit/`. The do
 
 ## Stack
 
-- Flutter 3.35+ / Dart 3.9+
+- Flutter 3.37+ / Dart 3.10+
 - Riverpod 3 (state management)
 - go_router 17 (routing, `StatefulShellRoute` for persistent bottom nav)
 - Firebase Auth + Firestore (optional; in-memory by default)
