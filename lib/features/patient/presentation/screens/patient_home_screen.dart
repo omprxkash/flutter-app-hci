@@ -17,7 +17,7 @@ class PatientHomeScreen extends ConsumerWidget {
   static const LinearGradient _gradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF1565C0), Color(0xFF6A1B9A)],
+    colors: [Color(0xFF2E5BFF), Color(0xFF5B8BFF)],
   );
 
   String _greeting() {
@@ -62,7 +62,7 @@ class PatientHomeScreen extends ConsumerWidget {
                     expandedHeight: 180,
                     pinned: true,
                     automaticallyImplyLeading: false,
-                    backgroundColor: const Color(0xFF1565C0),
+                    backgroundColor: const Color(0xFF2E5BFF),
                     flexibleSpace: FlexibleSpaceBar(
                       background: Container(
                         decoration: const BoxDecoration(gradient: _gradient),
@@ -156,39 +156,52 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 48),
+      padding: const EdgeInsets.only(top: 64),
       child: Column(
         children: <Widget>[
-          Container(
-            width: 90,
-            height: 90,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0xFF1565C0).withOpacity(0.08),
-            ),
-            child: const Icon(
-              Icons.assignment_outlined,
-              size: 44,
-              color: Color(0xFF1565C0),
-            ),
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: 140,
+                height: 140,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFEEF3FF),
+                ),
+              ),
+              Container(
+                width: 96,
+                height: 96,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFE0EAFF),
+                ),
+                child: const Icon(
+                  Icons.assignment_turned_in_outlined,
+                  size: 44,
+                  color: Color(0xFF2E5BFF),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 28),
           Text(
-            'No assessments yet',
+            'All caught up',
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF1A1F36),
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Your doctor hasn\'t assigned any assessments yet.\nCheck back soon.',
+            'Nothing to fill out right now.\nYour doctor will let you know.',
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               fontSize: 14,
               color: const Color(0xFF52596B),
-              height: 1.5,
+              height: 1.55,
             ),
           ),
         ],
@@ -246,17 +259,23 @@ class _PendingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool overdue = assignment.isOverdue;
-    final Color accent = overdue ? AppColors.danger : const Color(0xFF1565C0);
+    final Color accent = overdue ? AppColors.danger : const Color(0xFF2E5BFF);
 
     return Material(
       borderRadius: BorderRadius.circular(18),
-      elevation: 2,
-      shadowColor: accent.withOpacity(0.15),
+      elevation: 0,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: Colors.white,
-          border: Border.all(color: accent.withOpacity(0.3), width: 1.5),
+          border: Border.all(color: const Color(0xFFE3E6EE)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         padding: const EdgeInsets.all(18),
         child: Column(

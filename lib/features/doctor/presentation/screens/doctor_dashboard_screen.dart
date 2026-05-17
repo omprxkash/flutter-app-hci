@@ -41,38 +41,54 @@ class DoctorDashboardScreen extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         children: <Widget>[
           // Doctor identity header
-          Row(
-            children: <Widget>[
-              CircleAvatar(
-                radius: 26,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.15),
-                child: Text(
-                  doctorName.isNotEmpty ? doctorName[0].toUpperCase() : 'D',
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: AppColors.primary,
+                  child: Text(
+                    doctorName.isNotEmpty ? doctorName[0].toUpperCase() : 'D',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 14),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Dr. $doctorName',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Dr. $doctorName',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        specialty,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.65),
+                            ),
+                      ),
+                    ],
                   ),
-                  Text(specialty, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                  )),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
 
           _StatsRow(doctorId: doctorId),
           const SizedBox(height: 32),
@@ -234,12 +250,15 @@ class _PendingReviewCard extends ConsumerWidget {
     final String firstName = patientName.split(' ').first;
 
     return SizedBox(
-      width: 200,
+      width: 210,
       child: Card(
-        elevation: 2,
+        elevation: 0,
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.warning.withValues(alpha: 0.35), width: 1.5),
+          side: BorderSide(
+            color: Theme.of(context).dividerColor,
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(14),
@@ -248,6 +267,15 @@ class _PendingReviewCard extends ConsumerWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: AppColors.warning,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   CircleAvatar(
                     radius: 14,
                     backgroundColor: AppColors.primary.withValues(alpha: 0.15),
@@ -305,12 +333,15 @@ class _PendingReviewCard extends ConsumerWidget {
                     pathParameters: <String, String>{'responseId': response.id},
                   ),
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.warning,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     textStyle:
                         const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
-                  child: const Text('Review Now'),
+                  child: const Text('Review'),
                 ),
               ),
             ],

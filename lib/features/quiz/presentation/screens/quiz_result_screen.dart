@@ -175,8 +175,15 @@ class QuizResultScreen extends ConsumerWidget {
                           ),
                         ),
                       ],
+                      if (quiz.severityBands.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 16),
+                        _SeverityScale(
+                          bands: quiz.severityBands,
+                          score: response.autoScore,
+                        ),
+                      ],
                       if (band?.guidance != null) ...<Widget>[
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 14),
                         Text(
                           band!.guidance!,
                           style: GoogleFonts.poppins(
@@ -202,7 +209,7 @@ class QuizResultScreen extends ConsumerWidget {
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                'Auto-calculated screening score — your doctor will review and may adjust the final result.',
+                                'Auto-calculated score. Your doctor will review this within a day or two and may adjust the final result.',
                                 style: GoogleFonts.poppins(
                                   fontSize: 12,
                                   color: const Color(0xFF52596B),
@@ -356,6 +363,89 @@ class QuizResultScreen extends ConsumerWidget {
         ],
       ),
       child: child,
+    );
+  }
+}
+
+class _SeverityScale extends StatelessWidget {
+  const _SeverityScale({required this.bands, required this.score});
+
+  final List<SeverityBand> bands;
+  final int score;
+
+  @override
+  Widget build(BuildContext context) {
+    if (bands.isEmpty) return const SizedBox.shrink();
+    final int minScore = bands.first.minInclusive;
+    final int maxScore = bands.last.maxInclusive;
+    final int range = (maxScore - minScore).clamp(1, 1 << 30);
+    final double markerPos =
+        ((score - minScore) / range).clamp(0.0, 1.0);
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints c) {
+        final double width = c.maxWidth;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: SizedBox(
+                height: 10,
+                child: Row(
+                  children: <Widget>[
+                    for (final SeverityBand b in bands)
+                      Expanded(
+                        flex: (b.maxInclusive - b.minInclusive + 1),
+                        child: Container(color: b.color.withValues(alpha: 0.85)),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            SizedBox(
+              height: 14,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: <Widget>[
+                  Positioned(
+                    left: (markerPos * width).clamp(0.0, width - 2),
+                    top: -4,
+                    child: Container(
+                      width: 2,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1A1F36),
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '$minScore',
+                  style: GoogleFonts.poppins(
+                    fontSize: 11,
+                    color: const Color(0xFF8A90A2),
+                  ),
+                ),
+                Text(
+                  '$maxScore',
+                  style: GoogleFonts.poppins(
+                    fontSize: 11,
+                    color: const Color(0xFF8A90A2),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

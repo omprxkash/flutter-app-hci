@@ -1,112 +1,119 @@
 # MedQuiz
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.27+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.4+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![CI](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml)
+[![Flutter](https://img.shields.io/badge/Flutter-3.35+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Windows-blue)]()
 
-A small Flutter app I've been building to play with the idea of moving psychiatric screening questionnaires (PHQ-9, GAD-7, MMSE) off paper and onto a phone. The patient fills out the form on their device, it auto-scores against the published rubric, and the doctor reviews the result on a web dashboard and can adjust the score and add notes.
+A Flutter app for running psychiatric screening questionnaires between doctors and their patients — PHQ-9, GAD-7, MMSE, or custom ones the doctor builds.
 
-Not meant for real clinical use. It's a side project that started life as coursework.
+---
 
-## What it does
+## The idea
 
-Patient side: phone number + OTP to sign in (one less password to forget), see assigned questionnaires, fill them out one question per screen with big tap targets, look at past results and any notes the doctor left.
+The flow is straightforward:
 
-Doctor side: email + password, dashboard with pending reviews and a patient list, ability to assign one of the built-in questionnaires or build a custom one, review responses question by question, override the auto-score, leave a note.
+1. **Doctor logs in** → sees a dashboard with their patients and any responses waiting for review
+2. **Doctor assigns a quiz** to a patient (PHQ-9 for depression screening, GAD-7 for anxiety, MMSE for cognitive screening, or a custom one they build)
+3. **Patient opens the app** → sees the assigned quiz on their home screen, taps to fill it out
+4. **Patient submits** → the app auto-scores against the published rubric and shows the result with a severity band
+5. **Doctor reviews** → can see the patient's answers, adjust the score if their clinical judgment says so, and leave notes with a follow-up date
 
-## Built-in questionnaires
+That's the whole loop. Nothing fancy — just getting paper forms off clipboards and onto phones.
 
-- PHQ-9, depression severity. 9 items, 0 to 27, five bands from Minimal to Severe.
-- GAD-7, generalized anxiety. 7 items, 0 to 21.
-- MMSE, cognitive screening. 30 points across 11 task groups.
+---
 
-Scoring follows the published rubrics with citations in the code. Covered by unit tests.
+## Screenshots
 
-You can also build custom questionnaires from six question types: single choice, multi-select, Likert (5-point), yes/no, numeric range, free text.
+| Patient home | Quiz result | Doctor dashboard |
+|---|---|---|
+| *docs/screenshots/06-patient-home.png* | *docs/screenshots/08-quiz-result.png* | *docs/screenshots/03-doctor-dashboard.png* |
 
-## Stack
+*(Screenshots coming — run the app and you'll see it)*
 
-- Flutter 3.27+, Dart 3.4+
-- Riverpod 3 for state
-- go_router 17 for routing
-- Firebase Auth + Firestore + Storage (optional, see below)
-- flutter_form_builder for forms
-- fl_chart for the doctor's progress charts
-- flutter_localizations (English is the only one fully translated, Tamil and Hindi are stubbed)
+---
 
-## Running it
+## Where the data lives
 
-You need [Flutter](https://docs.flutter.dev/get-started/install) 3.27 or newer. Then:
+By default everything is **in-memory**. That means:
+
+- No database setup needed to run it
+- All data is gone when you restart the app
+- Perfect for trying it out, useless for production
+
+If you want real persistence, run `flutterfire configure` in the project root and replace `lib/firebase_options.dart` with the generated file. The app will automatically switch to Firestore. Full steps are in [`docs/setup.md`](docs/setup.md).
+
+### What's seeded on startup
+
+| Demo account | Details |
+|---|---|
+| Doctor | Dr. Demo · General Medicine · `doctor@demo.local` / `password123` |
+| Patient 1 | Anjali Demo · 34 F · linked to Dr. Demo |
+| Patient 2 | Rahul Patel · 52 M · linked to Dr. Demo |
+| Patient 3 | Maria Lopez · 41 F · linked to Dr. Demo |
+
+Quizzes available out of the box: PHQ-9, GAD-7, MMSE. The doctor can also build custom questionnaires from six question types.
+
+---
+
+## Logging in
+
+**Doctor:** email + password. Use `doctor@demo.local` / `password123` for the demo account.
+
+**Patient:** phone number + 6-digit OTP.
+
+> **Important:** in the default in-memory mode, no SMS is ever sent. The OTP screen accepts any 6-digit number — just type `123456` and it'll work. This is intentional for demo use. Once you wire up Firebase and a real SMS provider, the verification becomes real.
+
+---
+
+## Run it
+
+You need [Flutter 3.35+](https://docs.flutter.dev/get-started/install).
 
 ```bash
 git clone https://github.com/omprxkash/flutter-app-hci.git
 cd flutter-app-hci
 flutter pub get
-flutter create .          # regenerates android/ ios/ web/ if missing
-flutter run -d chrome     # or -d windows, -d android, etc.
+flutter run -d chrome        # or -d windows, -d android, etc.
 ```
 
-The app boots in offline mode by default. No Firebase setup needed. There's a seeded demo doctor and patient:
+Both roles have a bottom navigation bar. Patient gets Home / History / Profile. Doctor gets Dashboard / Library / Profile.
 
-| Role    | Login                                       |
-|---------|---------------------------------------------|
-| Doctor  | `doctor@demo.local` / `password123`         |
-| Patient | any phone number + any 6-digit OTP          |
+---
 
-To wire up a real Firebase backend instead, run `flutterfire configure` and replace `lib/firebase_options.dart` with the generated one. The full walk-through is in [`docs/setup.md`](docs/setup.md).
+## Quiz scoring
 
-### Getting around
+| Quiz | Items | Range | Bands |
+|---|---|---|---|
+| PHQ-9 (depression) | 9 | 0–27 | Minimal / Mild / Moderate / Moderately severe / Severe |
+| GAD-7 (anxiety) | 7 | 0–21 | Minimal / Mild / Moderate / Severe |
+| MMSE (cognitive) | 30 tasks | 0–30 | Normal / Mild impairment / Moderate / Severe |
 
-Both flows have a bottom nav bar:
+Scoring follows published rubrics. Covered by unit tests in `test/unit/`. The doctor can always override the auto-score — arithmetic doesn't beat clinical judgment.
 
-- Patient: Home (assigned quizzes), History (past results), Profile.
-- Doctor: Dashboard (stats, pending reviews, patients), Library (quizzes), Profile.
+---
 
-## Screenshots
+## What I'm thinking of adding next
 
-Coming soon. See [docs/screenshots/](docs/screenshots/) for what I want to capture.
+- **PHQ-9 Q9 alert** — auto-flag to the doctor dashboard any time Q9 (suicidal ideation) is answered above 0, regardless of total score
+- **Reminder notifications** — nudge patients who have a pending quiz and haven't opened it in a day or two
+- **Progress chart** — sparkline of the last 6 scores on the patient's doctor-detail screen, so trends are visible at a glance
+- **Multi-doctor support** — right now each patient has one `doctorId`; changing that to a list would let a patient be shared across a care team
+- **Real SMS/email verification** — straightforward once Firebase Auth is wired up; the OTP flow is already in place
+- **Audit log for score overrides** — track when a doctor changes the auto-score and by how much, stored alongside the review
 
-## Project layout
+---
 
-```
-lib/
-├── core/           theme, router, shared widgets, utils
-└── features/
-    ├── auth/       patient OTP + doctor email login
-    ├── patient/    home, quiz flow, history, profile
-    ├── quiz/       domain entities, preset quizzes, scoring
-    └── doctor/     dashboard, patient detail, review, quiz builder
-```
+## Stack
 
-Clean architecture, sort of. Domain has zero Flutter imports. Repos have both in-memory and Firebase implementations. Errors come back as `Result<T, Failure>` instead of thrown exceptions so the type system forces you to handle them. More in [`docs/architecture.md`](docs/architecture.md).
+- Flutter 3.35+ / Dart 3.9+
+- Riverpod 3 (state management)
+- go_router 17 (routing, `StatefulShellRoute` for persistent bottom nav)
+- Firebase Auth + Firestore (optional; in-memory by default)
+- flutter_form_builder, fl_chart, google_fonts, intl
 
-## Design notes
+Clean architecture: domain has zero Flutter imports, repos have in-memory and Firebase implementations side by side. More in [`docs/architecture.md`](docs/architecture.md).
 
-A few decisions worth writing down somewhere, because they're easy to forget the reasoning behind:
-
-One question per screen. Reduces cognitive load and matches what patients already know from paper forms.
-
-Minimum 48dp tap targets and 18sp body text. The target users include elderly patients and people who don't have their reading glasses on.
-
-Phone OTP instead of email/password. A lot of patients in the demographic I'm targeting (low-literacy, elderly) don't manage their own email reliably.
-
-Likert as five large buttons, not a slider. Sliders are imprecise on touchscreens and genuinely confusing for people with motor impairments.
-
-The doctor can always override the auto-score. Arithmetic doesn't beat clinical judgement.
-
-## Status
-
-- [x] Architecture + feature scaffolding
-- [x] Auth (patient OTP, doctor email)
-- [x] Quiz domain + preset library (PHQ-9, GAD-7, MMSE)
-- [x] Patient screens (home, take quiz, result, history)
-- [x] Doctor screens (dashboard, review, quiz builder, assign)
-- [x] Firestore rules + indexes
-- [x] Unit tests for scoring
-- [ ] CI
-- [ ] End-to-end tests
-- [ ] Production Firebase + deployed web build
+---
 
 ## License
 
