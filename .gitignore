@@ -10,7 +10,6 @@ build/
 **/.flutter-plugins-dependencies
 **/build/
 **/generated_plugin_registrant.dart
-pubspec.lock
 
 # IDE
 .idea/
@@ -40,11 +39,12 @@ firebase_options.dart.local
 google-services.json
 GoogleService-Info.plist
 
-# Secrets
+# Secrets / local config
 .env
 .env.local
 *.keystore
 key.properties
+android/local.properties
 
 # Platform scaffolding (regenerate with `flutter create .`)
 # Uncomment if you want to keep these out of the repo
