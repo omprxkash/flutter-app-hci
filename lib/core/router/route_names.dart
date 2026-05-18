@@ -22,6 +22,7 @@ class RouteNames {
   static const String patientProfile = 'patient_profile';
   static const String takeQuiz = 'take_quiz';
   static const String quizResult = 'quiz_result';
+  static const String selfCheck = 'self_check';
 
   // Doctor ------------------------------------------------------------
   static const String doctorDashboard = 'doctor_dashboard';
@@ -50,6 +51,7 @@ class RoutePaths {
   static const String patientProfile = '/patient/profile';
   static const String takeQuiz = '/patient/quiz/:assignmentId';
   static const String quizResult = '/patient/result/:responseId';
+  static const String selfCheck = '/patient/self-check';
 
   static const String doctorDashboard = '/doctor/dashboard';
   static const String doctorProfile = '/doctor/profile';

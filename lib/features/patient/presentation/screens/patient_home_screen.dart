@@ -7,6 +7,7 @@ import '../../../../core/router/route_names.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_formatters.dart';
 import '../../../../core/widgets/loading_indicator.dart';
+import '../../../auth/domain/entities/app_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../quiz/domain/entities/assignment.dart';
 import '../../../quiz/presentation/providers/quiz_providers.dart';
@@ -111,7 +112,7 @@ class PatientHomeScreen extends ConsumerWidget {
                     sliver: SliverList(
                       delegate: SliverChildListDelegate(<Widget>[
                         if (pending.isEmpty && done.isEmpty)
-                          _EmptyState()
+                          _EmptyState(user: user as AppUser?)
                         else ...[
                           if (pending.isNotEmpty) ...[
                             _SectionLabel(
@@ -153,37 +154,25 @@ class PatientHomeScreen extends ConsumerWidget {
 }
 
 class _EmptyState extends StatelessWidget {
+  const _EmptyState({this.user});
+  final AppUser? user;
+
   @override
   Widget build(BuildContext context) {
+    final bool hasDoctor = user?.doctorId != null;
+    return hasDoctor ? _doctorManaged(context) : _selfService(context);
+  }
+
+  Widget _doctorManaged(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 64),
       child: Column(
         children: <Widget>[
-          Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 140,
-                height: 140,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFFEEF3FF),
-                ),
-              ),
-              Container(
-                width: 96,
-                height: 96,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFFE0EAFF),
-                ),
-                child: const Icon(
-                  Icons.assignment_turned_in_outlined,
-                  size: 44,
-                  color: Color(0xFF2E5BFF),
-                ),
-              ),
-            ],
+          _CircleIcon(
+            outer: const Color(0xFFEEF3FF),
+            inner: const Color(0xFFE0EAFF),
+            icon: Icons.assignment_turned_in_outlined,
+            iconColor: const Color(0xFF2E5BFF),
           ),
           const SizedBox(height: 28),
           Text(
@@ -206,6 +195,107 @@ class _EmptyState extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _selfService(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 48),
+      child: Column(
+        children: <Widget>[
+          _CircleIcon(
+            outer: const Color(0xFFE8F5E9),
+            inner: const Color(0xFFC8E6C9),
+            icon: Icons.self_improvement_rounded,
+            iconColor: const Color(0xFF2E7D32),
+          ),
+          const SizedBox(height: 28),
+          Text(
+            'Check in with yourself',
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF1A1F36),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Take a clinically validated assessment\n— no referral needed.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: const Color(0xFF52596B),
+              height: 1.55,
+            ),
+          ),
+          const SizedBox(height: 28),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: ElevatedButton.icon(
+              onPressed: () => context.pushNamed(RouteNames.selfCheck),
+              icon: const Icon(Icons.play_arrow_rounded),
+              label: Text(
+                'Start a Self-Check',
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2E7D32),
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 52),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Have a doctor\'s invite code? Go to Profile → Connect.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              color: const Color(0xFF9EA5B8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CircleIcon extends StatelessWidget {
+  const _CircleIcon({
+    required this.outer,
+    required this.inner,
+    required this.icon,
+    required this.iconColor,
+  });
+  final Color outer;
+  final Color inner;
+  final IconData icon;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        Container(
+          width: 140,
+          height: 140,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: outer),
+        ),
+        Container(
+          width: 96,
+          height: 96,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: inner),
+          child: Icon(icon, size: 44, color: iconColor),
+        ),
+      ],
     );
   }
 }

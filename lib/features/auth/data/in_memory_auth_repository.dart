@@ -95,7 +95,7 @@ class InMemoryAuthRepository implements AuthRepository {
         phone: phone,
         age: registration.age,
         gender: registration.gender,
-        doctorId: registration.doctorId ?? 'doctor-demo',
+        doctorId: registration.doctorId,
         preferredLocale: registration.preferredLocale,
         createdAt: DateTime.now(),
       );

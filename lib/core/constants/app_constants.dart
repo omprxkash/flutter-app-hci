@@ -23,4 +23,7 @@ class AppConstants {
   /// Soft cap on the number of questions allowed in a custom quiz.
   /// (Prevents runaway forms; clinical instruments rarely exceed 30 items.)
   static const int maxQuestionsPerQuiz = 50;
+
+  /// Sentinel doctorId for quizzes a patient starts without a linked doctor.
+  static const String selfServiceDoctorId = 'self';
 }

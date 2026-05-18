@@ -101,6 +101,11 @@ class AuthController extends Notifier<AsyncValue<void>> {
     return r;
   }
 
+  Future<bool> updateProfile(AppUser user) async {
+    final Result<AppUser, Failure> r = await _repo.updateProfile(user);
+    return r is Success<AppUser, Failure>;
+  }
+
   Future<void> signOut() async {
     await _repo.signOut();
   }

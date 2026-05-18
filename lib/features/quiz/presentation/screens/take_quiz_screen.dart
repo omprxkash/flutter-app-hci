@@ -43,6 +43,31 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
     _startedAt = DateTime.now();
   }
 
+  Future<void> _confirmAndSubmit(
+      Quiz quiz, Assignment assignment, String patientId) async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: const Text('Submit assessment?'),
+        content: Text(
+          'You\'re about to submit the ${quiz.title}. '
+          'Your answers cannot be changed once submitted.',
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Review answers'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Submit'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) _submit(quiz, assignment, patientId);
+  }
+
   Future<void> _submit(Quiz quiz, Assignment assignment, String patientId) async {
     setState(() => _isSubmitting = true);
     final score = ref.read(scoreResponseProvider).call(quiz, _answers.values.toList());
@@ -274,7 +299,7 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
                         onPressed: canProceed && !_isSubmitting
                             ? () {
                                 if (isLast) {
-                                  _submit(quiz, assignment, patientId);
+                                  _confirmAndSubmit(quiz, assignment, patientId);
                                 } else {
                                   setState(() => _currentIndex++);
                                 }

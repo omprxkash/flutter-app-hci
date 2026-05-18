@@ -19,6 +19,7 @@ import '../../features/doctor/presentation/screens/review_response_screen.dart';
 import '../../features/patient/presentation/screens/patient_history_screen.dart';
 import '../../features/patient/presentation/screens/patient_home_screen.dart';
 import '../../features/patient/presentation/screens/patient_profile_screen.dart';
+import '../../features/patient/presentation/screens/self_service_quiz_screen.dart';
 import '../../features/quiz/presentation/screens/quiz_result_screen.dart';
 import '../../features/quiz/presentation/screens/take_quiz_screen.dart';
 import '../widgets/main_shell.dart';
@@ -156,6 +157,11 @@ final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((Ref
       ),
 
       // Patient full-screen flows (no shell) ----------------------------
+      GoRoute(
+        path: RoutePaths.selfCheck,
+        name: RouteNames.selfCheck,
+        builder: (_, __) => const SelfServiceQuizScreen(),
+      ),
       GoRoute(
         path: RoutePaths.takeQuiz,
         name: RouteNames.takeQuiz,
