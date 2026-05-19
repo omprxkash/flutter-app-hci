@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
@@ -52,7 +51,7 @@ class SelfServiceQuizScreen extends ConsumerWidget {
                       children: <Widget>[
                         Text(
                           'Self-Check',
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -61,7 +60,7 @@ class SelfServiceQuizScreen extends ConsumerWidget {
                         const SizedBox(height: 6),
                         Text(
                           'Clinically validated assessments — no referral needed.',
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                             fontSize: 13,
                             color: Colors.white70,
                           ),
@@ -79,7 +78,7 @@ class SelfServiceQuizScreen extends ConsumerWidget {
               delegate: SliverChildListDelegate(<Widget>[
                 Text(
                   'Choose an assessment',
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFF52596B),
@@ -230,7 +229,7 @@ class _QuizCard extends StatelessWidget {
                         ),
                         child: Text(
                           meta.tag,
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             color: meta.color,
@@ -240,7 +239,7 @@ class _QuizCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         quiz.title,
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF1A1F36),
@@ -254,7 +253,7 @@ class _QuizCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               meta.description,
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                 fontSize: 13,
                 color: const Color(0xFF52596B),
                 height: 1.5,
@@ -286,7 +285,7 @@ class _QuizCard extends StatelessWidget {
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: Text(
                   'Start Assessment',
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
@@ -334,7 +333,7 @@ class _Chip extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             label,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: color,
@@ -365,7 +364,7 @@ class _DisclaimerBanner extends StatelessWidget {
           Expanded(
             child: Text(
               'These are screening tools, not diagnoses. Always discuss results with a qualified healthcare professional.',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                 fontSize: 12,
                 color: const Color(0xFF6D4C00),
                 height: 1.5,

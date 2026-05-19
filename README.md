@@ -40,7 +40,7 @@ By default everything is **in-memory**. That means:
 - All data is gone when you restart the app
 - Perfect for trying it out, useless for production
 
-If you want real persistence, run `flutterfire configure` in the project root and replace `lib/firebase_options.dart` with the generated file. The app will automatically switch to Firestore. Full steps are in [`docs/setup.md`](docs/setup.md).
+If you want real persistence, run `flutterfire configure` in the project root and replace `lib/core/config/firebase_options.dart` with the generated file. The app will automatically switch to Firestore. Full steps are in [`docs/setup.md`](docs/setup.md).
 
 ### What's seeded on startup
 
@@ -92,9 +92,21 @@ Scoring follows published rubrics. Covered by unit tests in `test/unit/`. The do
 
 ---
 
+## Design
+
+The UI is light and clean — `#F7FAFC` background, Poppins typography, colorful accent tiles for stats, and left-bordered cards to signal status at a glance. Inspired by Rocket Money's dashboard (bold full-color stat tiles) and Informed News (typography-first reading flow). No dark gradient prototypes left.
+
+- Patient home: deep indigo→purple gradient header with inline "Pending / Completed" stat pills
+- Doctor dashboard: Q9 suicidal-ideation alert banner, responsive 2-column patient grid on tablet/desktop (≥720px)
+- Quiz result: full-color score hero card tinted by severity band
+- Take quiz: clean white reading layout with a purple progress bar
+- Tokens centralized in `lib/core/theme/`
+
+---
+
 ## What I'm thinking of adding next
 
-- **PHQ-9 Q9 alert** — auto-flag to the doctor dashboard any time Q9 (suicidal ideation) is answered above 0, regardless of total score
+- ~~**PHQ-9 Q9 alert**~~ — done (red banner on doctor dashboard when any pending review has Q9 > 0)
 - **Reminder notifications** — nudge patients who have a pending quiz and haven't opened it in a day or two
 - **Progress chart** — sparkline of the last 6 scores on the patient's doctor-detail screen, so trends are visible at a glance
 - **Multi-doctor support** — right now each patient has one `doctorId`; changing that to a list would let a patient be shared across a care team
@@ -109,9 +121,9 @@ Scoring follows published rubrics. Covered by unit tests in `test/unit/`. The do
 - Riverpod 3 (state management)
 - go_router 17 (routing, `StatefulShellRoute` for persistent bottom nav)
 - Firebase Auth + Firestore (optional; in-memory by default)
-- flutter_form_builder, fl_chart, google_fonts, intl
+- fl_chart, google_fonts, intl
 
-Clean architecture: domain has zero Flutter imports, repos have in-memory and Firebase implementations side by side. More in [`docs/architecture.md`](docs/architecture.md).
+Clean per-feature architecture — every feature (`auth`, `doctor`, `patient`, `quiz`) has consistent `domain/` (entities + abstract repos), `data/` (in-memory + Firebase implementations side by side), and `presentation/` (providers + screens + widgets) layers. Domain has zero Flutter imports. More in [`docs/architecture.md`](docs/architecture.md).
 
 ---
 

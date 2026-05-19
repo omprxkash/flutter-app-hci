@@ -1,25 +1,29 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/demo_patients.dart';
 import '../../../auth/domain/entities/app_user.dart';
+import '../../../quiz/domain/entities/assignment.dart';
+import '../../../quiz/domain/entities/response.dart';
+import '../../../quiz/presentation/providers/quiz_providers.dart';
+import '../../data/in_memory_doctor_repository.dart';
+import '../../domain/repositories/doctor_repository.dart';
 
-/// Lists the patients assigned to a given doctor.
-///
-/// In v1 (in-memory mode) this returns a seeded list. In production this
-/// would issue a Firestore query for `users where role == 'patient' and
-/// doctorId == :doctorId`.
+final Provider<DoctorRepository> doctorRepositoryProvider =
+    Provider<DoctorRepository>((_) => InMemoryDoctorRepository());
+
 final patientsForDoctorProvider =
-    FutureProvider.family<List<AppUser>, String>((Ref ref, String doctorId) async {
-  return kDemoPatients.where((AppUser p) => p.doctorId == doctorId).toList();
-});
+    FutureProvider.family<List<AppUser>, String>((Ref ref, String doctorId) =>
+        ref.watch(doctorRepositoryProvider).getPatientsForDoctor(doctorId));
 
-/// Quick lookup by id for the patient detail / review screens.
 final patientByIdProvider =
-    FutureProvider.family<AppUser?, String>((Ref ref, String patientId) async {
-  // Walk the seeded list. Replace with a Firestore doc read in production.
-  final List<AppUser> all = await ref.watch(patientsForDoctorProvider('doctor-demo').future);
-  for (final AppUser u in all) {
-    if (u.id == patientId) return u;
-  }
-  return null;
-});
+    FutureProvider.family<AppUser?, String>((Ref ref, String patientId) =>
+        ref.watch(doctorRepositoryProvider).getPatientById(patientId));
+
+final doctorAssignmentsProvider = StreamProvider.family<List<Assignment>, String>(
+  (Ref ref, String doctorId) =>
+      ref.watch(quizRepositoryProvider).watchAssignmentsForDoctor(doctorId),
+);
+
+final doctorPendingReviewsProvider = StreamProvider.family<List<QuizResponse>, String>(
+  (Ref ref, String doctorId) =>
+      ref.watch(responseRepositoryProvider).watchResponsesAwaitingReview(doctorId),
+);

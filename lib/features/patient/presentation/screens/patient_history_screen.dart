@@ -9,7 +9,7 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../quiz/domain/entities/response.dart';
-import '../../../quiz/presentation/providers/quiz_providers.dart';
+import '../providers/patient_providers.dart';
 import '../../../quiz/presentation/widgets/score_badge.dart';
 
 class PatientHistoryScreen extends ConsumerWidget {

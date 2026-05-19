@@ -1,71 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/router/route_names.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 
-  static const LinearGradient _gradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFF1565C0), Color(0xFF6A1B9A)],
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: _gradient),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
+      backgroundColor: const Color(0xFFF7FAFC),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 48),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 52,
+                    height: 52,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.15),
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(14),
                     ),
                     child: const Icon(
                       Icons.local_hospital_rounded,
-                      size: 52,
                       color: Colors.white,
+                      size: 28,
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Text(
-                    'MedQuiz',
-                    style: GoogleFonts.poppins(
+                  const Text(
+                    'Welcome to\nMedQuiz',
+                    style: TextStyle(
                       fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF0A0A0A),
+                      height: 1.15,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Who are you?',
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      color: Colors.white70,
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Psychiatric screening made simple.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF666666),
                     ),
                   ),
                   const SizedBox(height: 48),
-                  _RoleButton(
+                  const Text(
+                    'Continue as',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF666666),
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _RoleCard(
                     icon: Icons.person_rounded,
-                    label: "I'm a patient",
+                    iconColor: AppColors.primary,
+                    iconBg: AppColors.primaryLight,
+                    label: 'Patient',
                     subtitle: 'Take your assigned assessments',
                     onTap: () => context.goNamed(RouteNames.patientLogin),
                   ),
-                  const SizedBox(height: 16),
-                  _RoleButton(
+                  const SizedBox(height: 12),
+                  _RoleCard(
                     icon: Icons.medical_services_rounded,
-                    label: "I'm a doctor",
+                    iconColor: const Color(0xFF6C56FC),
+                    iconBg: const Color(0xFFEEEBFF),
+                    label: 'Doctor',
                     subtitle: 'Assign and review assessments',
                     onTap: () => context.goNamed(RouteNames.doctorLogin),
                   ),
@@ -79,15 +89,19 @@ class RoleSelectionScreen extends StatelessWidget {
   }
 }
 
-class _RoleButton extends StatelessWidget {
-  const _RoleButton({
+class _RoleCard extends StatelessWidget {
+  const _RoleCard({
     required this.icon,
+    required this.iconColor,
+    required this.iconBg,
     required this.label,
     required this.subtitle,
     required this.onTap,
   });
 
   final IconData icon;
+  final Color iconColor;
+  final Color iconBg;
   final String label;
   final String subtitle;
   final VoidCallback onTap;
@@ -95,24 +109,27 @@ class _RoleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withOpacity(0.15),
-      borderRadius: BorderRadius.circular(20),
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        splashColor: Colors.white24,
+        borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
+          ),
           child: Row(
             children: <Widget>[
               Container(
-                width: 52,
-                height: 52,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.2),
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: Colors.white, size: 28),
+                child: Icon(icon, color: iconColor, size: 24),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -121,24 +138,25 @@ class _RoleButton extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       label,
-                      style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0A0A0A),
                       ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: GoogleFonts.poppins(
+                      style: const TextStyle(
                         fontSize: 13,
-                        color: Colors.white70,
+                        color: Color(0xFF666666),
                       ),
                     ),
                   ],
                 ),
               ),
               const Icon(Icons.arrow_forward_ios_rounded,
-                  color: Colors.white70, size: 18),
+                  color: Color(0xFFAAAAAA), size: 16),
             ],
           ),
         ),

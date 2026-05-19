@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/router/route_names.dart';
@@ -30,12 +29,6 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
   int _currentIndex = 0;
   bool _isSubmitting = false;
   DateTime? _startedAt;
-
-  static const LinearGradient _gradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFF1565C0), Color(0xFF6A1B9A)],
-  );
 
   @override
   void initState() {
@@ -162,184 +155,188 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
         !current.required || (currentAnswer != null && !currentAnswer.isEmpty);
     final double progress = (_currentIndex + 1) / questions.length;
 
+    const Color accentColor = Color(0xFF6C56FC);
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: _gradient),
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              // Top bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 16, 0),
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.close_rounded, color: Colors.white),
-                      onPressed: () => context.pop(),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            quiz.title,
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'Question ${_currentIndex + 1} of ${questions.length}',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      '${(progress * 100).round()}%',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Progress bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: LinearProgressIndicator(
-                    value: progress,
-                    minHeight: 6,
-                    backgroundColor: Colors.white.withOpacity(0.25),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+      backgroundColor: const Color(0xFFF7FAFC),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            // ── Top bar ──────────────────────────────────────────────
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(4, 8, 16, 0),
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.close_rounded,
+                        color: Color(0xFF0A0A0A)),
+                    onPressed: () => context.pop(),
                   ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          quiz.title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF0A0A0A),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          '${_currentIndex + 1} of ${questions.length}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF666666),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: accentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${(progress * 100).round()}%',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: accentColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // ── Progress bar ─────────────────────────────────────────
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 5,
+                  backgroundColor: const Color(0xFFE2E8F0),
+                  valueColor: const AlwaysStoppedAnimation<Color>(accentColor),
                 ),
               ),
+            ),
 
-              const SizedBox(height: 20),
-
-              // Question content on white card
-              Expanded(
+            // ── Question area ─────────────────────────────────────────
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(28),
-                      topRight: Radius.circular(28),
-                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 20,
-                        offset: const Offset(0, -4),
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(28),
-                      topRight: Radius.circular(28),
-                    ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-                      child: QuestionCard(
-                        question: current,
-                        answer: currentAnswer,
-                        onChanged: (Answer a) {
-                          setState(() => _answers[current.id] = a);
-                        },
-                      ),
-                    ),
+                  child: QuestionCard(
+                    question: current,
+                    answer: currentAnswer,
+                    onChanged: (Answer a) {
+                      setState(() => _answers[current.id] = a);
+                    },
                   ),
                 ),
               ),
+            ),
 
-              // Bottom action buttons on white
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                child: Row(
-                  children: <Widget>[
-                    if (_currentIndex > 0) ...<Widget>[
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => setState(() => _currentIndex--),
-                          icon: const Icon(Icons.arrow_back_rounded),
-                          label: Text(
-                            'Back',
-                            style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF1565C0),
-                            side: const BorderSide(color: Color(0xFF1565C0)),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
+            // ── Bottom navigation ─────────────────────────────────────
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+              child: Row(
+                children: <Widget>[
+                  if (_currentIndex > 0) ...<Widget>[
                     Expanded(
-                      flex: 2,
-                      child: ElevatedButton.icon(
-                        onPressed: canProceed && !_isSubmitting
-                            ? () {
-                                if (isLast) {
-                                  _confirmAndSubmit(quiz, assignment, patientId);
-                                } else {
-                                  setState(() => _currentIndex++);
-                                }
-                              }
-                            : null,
-                        icon: _isSubmitting
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white),
-                              )
-                            : Icon(isLast
-                                ? Icons.check_rounded
-                                : Icons.arrow_forward_rounded),
-                        label: Text(
-                          isLast ? 'Submit' : 'Next',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: canProceed
-                              ? const Color(0xFF1565C0)
-                              : Colors.grey.shade300,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: OutlinedButton.icon(
+                        onPressed: () =>
+                            setState(() => _currentIndex--),
+                        icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                        label: const Text('Back',
+                            style:
+                                TextStyle(fontWeight: FontWeight.w600)),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF0A0A0A),
+                          side: const BorderSide(
+                              color: Color(0xFFE2E8F0)),
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          elevation: 0,
                         ),
                       ),
                     ),
+                    const SizedBox(width: 12),
                   ],
-                ),
+                  Expanded(
+                    flex: 2,
+                    child: FilledButton.icon(
+                      onPressed: canProceed && !_isSubmitting
+                          ? () {
+                              if (isLast) {
+                                _confirmAndSubmit(
+                                    quiz, assignment, patientId);
+                              } else {
+                                setState(() => _currentIndex++);
+                              }
+                            }
+                          : null,
+                      icon: _isSubmitting
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white),
+                            )
+                          : Icon(isLast
+                              ? Icons.check_rounded
+                              : Icons.arrow_forward_rounded,
+                              size: 18),
+                      label: Text(
+                        isLast ? 'Submit' : 'Next',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      style: FilledButton.styleFrom(
+                        backgroundColor:
+                            canProceed ? accentColor : const Color(0xFFCBD5E0),
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

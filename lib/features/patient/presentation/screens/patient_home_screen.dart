@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/router/route_names.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -10,7 +9,7 @@ import '../../../../core/widgets/loading_indicator.dart';
 import '../../../auth/domain/entities/app_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../quiz/domain/entities/assignment.dart';
-import '../../../quiz/presentation/providers/quiz_providers.dart';
+import '../providers/patient_providers.dart';
 
 class PatientHomeScreen extends ConsumerWidget {
   const PatientHomeScreen({super.key});
@@ -18,7 +17,7 @@ class PatientHomeScreen extends ConsumerWidget {
   static const LinearGradient _gradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFF2E5BFF), Color(0xFF5B8BFF)],
+    colors: [Color(0xFF1A0A3C), Color(0xFF6C56FC)],
   );
 
   String _greeting() {
@@ -60,44 +59,58 @@ class PatientHomeScreen extends ConsumerWidget {
               return CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
-                    expandedHeight: 180,
+                    expandedHeight: 210,
                     pinned: true,
                     automaticallyImplyLeading: false,
-                    backgroundColor: const Color(0xFF2E5BFF),
+                    backgroundColor: const Color(0xFF1A0A3C),
                     flexibleSpace: FlexibleSpaceBar(
                       background: Container(
                         decoration: const BoxDecoration(gradient: _gradient),
                         child: SafeArea(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+                            padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Text(
                                   '${_greeting()},',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    color: Colors.white70,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white.withOpacity(0.65),
                                   ),
                                 ),
+                                const SizedBox(height: 2),
                                 Text(
                                   firstName,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w800,
                                     color: Colors.white,
+                                    height: 1.1,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  pending.isEmpty
-                                      ? 'No pending assessments — you\'re all caught up!'
-                                      : '${pending.length} assessment${pending.length == 1 ? '' : 's'} waiting for you.',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    color: Colors.white70,
-                                  ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: <Widget>[
+                                    _StatPill(
+                                      value: '${pending.length}',
+                                      label: 'Pending',
+                                      color: pending.isEmpty
+                                          ? Colors.white.withOpacity(0.15)
+                                          : const Color(0xFFFFBF47).withOpacity(0.25),
+                                      textColor: pending.isEmpty
+                                          ? Colors.white.withOpacity(0.65)
+                                          : const Color(0xFFFFD76E),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    _StatPill(
+                                      value: '${done.length}',
+                                      label: 'Completed',
+                                      color: Colors.white.withOpacity(0.15),
+                                      textColor: Colors.white.withOpacity(0.8),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -164,32 +177,32 @@ class _EmptyState extends StatelessWidget {
   }
 
   Widget _doctorManaged(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 64),
+    return const Padding(
+      padding: EdgeInsets.only(top: 64),
       child: Column(
         children: <Widget>[
           _CircleIcon(
-            outer: const Color(0xFFEEF3FF),
-            inner: const Color(0xFFE0EAFF),
+            outer: Color(0xFFEEF3FF),
+            inner: Color(0xFFE0EAFF),
             icon: Icons.assignment_turned_in_outlined,
-            iconColor: const Color(0xFF2E5BFF),
+            iconColor: Color(0xFF2E5BFF),
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: 28),
           Text(
             'All caught up',
-            style: GoogleFonts.poppins(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1F36),
+              color: Color(0xFF1A1F36),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
             'Nothing to fill out right now.\nYour doctor will let you know.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
               fontSize: 14,
-              color: const Color(0xFF52596B),
+              color: Color(0xFF52596B),
               height: 1.55,
             ),
           ),
@@ -203,28 +216,28 @@ class _EmptyState extends StatelessWidget {
       padding: const EdgeInsets.only(top: 48),
       child: Column(
         children: <Widget>[
-          _CircleIcon(
-            outer: const Color(0xFFE8F5E9),
-            inner: const Color(0xFFC8E6C9),
+          const _CircleIcon(
+            outer: Color(0xFFE8F5E9),
+            inner: Color(0xFFC8E6C9),
             icon: Icons.self_improvement_rounded,
-            iconColor: const Color(0xFF2E7D32),
+            iconColor: Color(0xFF2E7D32),
           ),
           const SizedBox(height: 28),
-          Text(
+          const Text(
             'Check in with yourself',
-            style: GoogleFonts.poppins(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1A1F36),
+              color: Color(0xFF1A1F36),
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Take a clinically validated assessment\n— no referral needed.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
               fontSize: 14,
-              color: const Color(0xFF52596B),
+              color: Color(0xFF52596B),
               height: 1.55,
             ),
           ),
@@ -234,9 +247,9 @@ class _EmptyState extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () => context.pushNamed(RouteNames.selfCheck),
               icon: const Icon(Icons.play_arrow_rounded),
-              label: Text(
+              label: const Text(
                 'Start a Self-Check',
-                style: GoogleFonts.poppins(
+                style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -253,12 +266,12 @@ class _EmptyState extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Text(
+          const Text(
             'Have a doctor\'s invite code? Go to Profile → Connect.',
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
               fontSize: 12,
-              color: const Color(0xFF9EA5B8),
+              color: Color(0xFF9EA5B8),
             ),
           ),
         ],
@@ -327,7 +340,7 @@ class _SectionLabel extends StatelessWidget {
               const SizedBox(width: 5),
               Text(
                 label,
-                style: GoogleFonts.poppins(
+                style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: color,
@@ -342,6 +355,8 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
+// Left-accent card for pending quizzes. The 4px colored left bar communicates
+// urgency (red = overdue, primary blue = due soon) at a glance.
 class _PendingCard extends StatelessWidget {
   const _PendingCard({required this.assignment});
   final Assignment assignment;
@@ -351,102 +366,111 @@ class _PendingCard extends StatelessWidget {
     final bool overdue = assignment.isOverdue;
     final Color accent = overdue ? AppColors.danger : const Color(0xFF2E5BFF);
 
-    return Material(
-      borderRadius: BorderRadius.circular(18),
-      elevation: 0,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFE3E6EE)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.all(18),
-        child: Column(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFE3E6EE)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicHeight(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: accent.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Icon(Icons.assignment_outlined, color: accent, size: 26),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        assignment.quizTitle,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+            Container(width: 4, color: accent),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: accent.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Icon(Icons.assignment_outlined, color: accent, size: 26),
                         ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        overdue
-                            ? 'Overdue — was due ${DateFormatters.relative(assignment.dueAt!)}'
-                            : assignment.dueAt == null
-                                ? 'Assigned ${DateFormatters.relative(assignment.assignedAt)}'
-                                : 'Due ${DateFormatters.short(assignment.dueAt!)}',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: overdue ? AppColors.danger : const Color(0xFF52596B),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                assignment.quizTitle,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                overdue
+                                    ? 'Overdue — was due ${DateFormatters.relative(assignment.dueAt!)}'
+                                    : assignment.dueAt == null
+                                        ? 'Assigned ${DateFormatters.relative(assignment.assignedAt)}'
+                                        : 'Due ${DateFormatters.short(assignment.dueAt!)}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: overdue ? AppColors.danger : const Color(0xFF52596B),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (assignment.notes != null && assignment.notes!.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F2FF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          assignment.notes!,
+                          style: const TextStyle(fontSize: 13, color: Color(0xFF52596B)),
                         ),
                       ),
                     ],
-                  ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () => context.pushNamed(
+                        RouteNames.takeQuiz,
+                        pathParameters: <String, String>{'assignmentId': assignment.id},
+                      ),
+                      icon: const Icon(Icons.play_arrow_rounded),
+                      label: const Text(
+                        'Start Assessment',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accent,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            if (assignment.notes != null && assignment.notes!.isNotEmpty) ...<Widget>[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0F2FF),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  assignment.notes!,
-                  style: GoogleFonts.poppins(fontSize: 13, color: const Color(0xFF52596B)),
-                ),
-              ),
-            ],
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () => context.pushNamed(
-                RouteNames.takeQuiz,
-                pathParameters: <String, String>{'assignmentId': assignment.id},
-              ),
-              icon: const Icon(Icons.play_arrow_rounded),
-              label: Text(
-                'Start Assessment',
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: accent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                elevation: 0,
               ),
             ),
           ],
@@ -456,6 +480,7 @@ class _PendingCard extends StatelessWidget {
   }
 }
 
+// Left-accent card for completed quizzes. Green = reviewed, teal = awaiting review.
 class _CompletedCard extends StatelessWidget {
   const _CompletedCard({required this.assignment});
   final Assignment assignment;
@@ -468,6 +493,7 @@ class _CompletedCard extends StatelessWidget {
     return Material(
       borderRadius: BorderRadius.circular(14),
       color: Colors.white,
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: assignment.responseId == null
             ? null
@@ -475,65 +501,126 @@ class _CompletedCard extends StatelessWidget {
                   RouteNames.quizResult,
                   pathParameters: <String, String>{'responseId': assignment.responseId!},
                 ),
-        borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFE3E6EE)),
-            borderRadius: BorderRadius.circular(14),
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Color(0xFFE3E6EE)),
+              right: BorderSide(color: Color(0xFFE3E6EE)),
+              bottom: BorderSide(color: Color(0xFFE3E6EE)),
+            ),
           ),
-          child: Row(
-            children: <Widget>[
-              Icon(
-                reviewed ? Icons.check_circle_rounded : Icons.hourglass_top_rounded,
-                color: accent,
-                size: 22,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      assignment.quizTitle,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(width: 4, color: accent),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          reviewed ? Icons.check_circle_rounded : Icons.hourglass_top_rounded,
+                          color: accent,
+                          size: 22,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                assignment.quizTitle,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                'Completed ${DateFormatters.relative(assignment.completedAt ?? assignment.assignedAt)}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF52596B),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: accent.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            reviewed ? 'Reviewed' : 'Awaiting review',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: accent,
+                            ),
+                          ),
+                        ),
+                        if (assignment.responseId != null) ...<Widget>[
+                          const SizedBox(width: 4),
+                          Icon(Icons.chevron_right_rounded,
+                              size: 20, color: Colors.grey.shade400),
+                        ],
+                      ],
                     ),
-                    Text(
-                      'Completed ${DateFormatters.relative(assignment.completedAt ?? assignment.assignedAt)}',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: const Color(0xFF52596B),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: accent.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  reviewed ? 'Reviewed' : 'Awaiting review',
-                  style: GoogleFonts.poppins(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: accent,
                   ),
                 ),
-              ),
-              if (assignment.responseId != null) ...<Widget>[
-                const SizedBox(width: 4),
-                Icon(Icons.chevron_right_rounded,
-                    size: 20, color: Colors.grey.shade400),
               ],
-            ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _StatPill extends StatelessWidget {
+  const _StatPill({
+    required this.value,
+    required this.label,
+    required this.color,
+    required this.textColor,
+  });
+
+  final String value;
+  final String label;
+  final Color color;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: textColor,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: textColor,
+            ),
+          ),
+        ],
       ),
     );
   }

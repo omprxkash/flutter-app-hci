@@ -4,7 +4,6 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/utils/result.dart';
 import '../../data/in_memory_quiz_repository.dart';
 import '../../data/in_memory_response_repository.dart';
-import '../../domain/entities/assignment.dart';
 import '../../domain/entities/quiz.dart';
 import '../../domain/entities/response.dart';
 import '../../domain/entities/review.dart';
@@ -39,28 +38,9 @@ final Provider<ScoreResponse> scoreResponseProvider = Provider<ScoreResponse>(
 );
 
 // ---------------------------------------------------------------------------
-// Watchers
+// Watchers — quiz / response lookups
+// Patient and doctor stream watchers live in their respective feature providers.
 // ---------------------------------------------------------------------------
-
-final patientAssignmentsProvider = StreamProvider.family<List<Assignment>, String>(
-  (Ref ref, String patientId) =>
-      ref.watch(quizRepositoryProvider).watchAssignmentsForPatient(patientId),
-);
-
-final doctorAssignmentsProvider = StreamProvider.family<List<Assignment>, String>(
-  (Ref ref, String doctorId) =>
-      ref.watch(quizRepositoryProvider).watchAssignmentsForDoctor(doctorId),
-);
-
-final patientResponsesProvider = StreamProvider.family<List<QuizResponse>, String>(
-  (Ref ref, String patientId) =>
-      ref.watch(responseRepositoryProvider).watchResponsesForPatient(patientId),
-);
-
-final doctorPendingReviewsProvider = StreamProvider.family<List<QuizResponse>, String>(
-  (Ref ref, String doctorId) =>
-      ref.watch(responseRepositoryProvider).watchResponsesAwaitingReview(doctorId),
-);
 
 final quizByIdProvider = FutureProvider.family<Quiz, String>(
   (Ref ref, String quizId) async {

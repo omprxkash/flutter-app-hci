@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/router/route_names.dart';
 import '../../../../core/widgets/app_scaffold.dart';
@@ -135,7 +134,7 @@ class _ConnectDoctorTile extends ConsumerWidget {
                   children: <Widget>[
                     Text(
                       'Connect to a Doctor',
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF2E5BFF),
@@ -143,7 +142,7 @@ class _ConnectDoctorTile extends ConsumerWidget {
                     ),
                     Text(
                       'Enter the invite code your doctor gave you',
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         fontSize: 12,
                         color: const Color(0xFF52596B),
                       ),
@@ -199,7 +198,7 @@ class _ConnectDoctorTile extends ConsumerWidget {
                   const SizedBox(height: 20),
                   Text(
                     'Enter invite code',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF1A1F36),
@@ -208,7 +207,7 @@ class _ConnectDoctorTile extends ConsumerWidget {
                   const SizedBox(height: 6),
                   Text(
                     'Ask your doctor for their 6-character invite code.',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 13,
                       color: const Color(0xFF52596B),
                     ),
@@ -286,7 +285,7 @@ class _ConnectDoctorTile extends ConsumerWidget {
                             )
                           : Text(
                               'Connect',
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
                               ),

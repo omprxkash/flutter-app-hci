@@ -9,7 +9,7 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../../auth/domain/entities/app_user.dart';
 import '../../../quiz/domain/entities/response.dart';
-import '../../../quiz/presentation/providers/quiz_providers.dart';
+import '../../../patient/presentation/providers/patient_providers.dart';
 import '../../../quiz/presentation/widgets/score_badge.dart';
 import '../providers/doctor_providers.dart';
 

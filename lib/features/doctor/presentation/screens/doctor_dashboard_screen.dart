@@ -11,7 +11,6 @@ import '../../../auth/domain/entities/app_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../quiz/domain/entities/assignment.dart';
 import '../../../quiz/domain/entities/response.dart';
-import '../../../quiz/presentation/providers/quiz_providers.dart';
 import '../providers/doctor_providers.dart';
 import '../widgets/stats_card.dart';
 
@@ -88,8 +87,12 @@ class DoctorDashboardScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 20),
 
+          // PHQ-9 Q9 suicidal ideation alert (shown when any pending review has Q9 > 0)
+          _Q9AlertBanner(doctorId: doctorId),
+
+          const SizedBox(height: 16),
           _StatsRow(doctorId: doctorId),
           const SizedBox(height: 32),
 
@@ -120,6 +123,78 @@ class DoctorDashboardScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+// Shown above stats when any pending PHQ-9 response has Q9 (suicidal ideation)
+// answered above "Not at all". Tapping navigates to the pending reviews list.
+class _Q9AlertBanner extends ConsumerWidget {
+  const _Q9AlertBanner({required this.doctorId});
+  final String doctorId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<List<QuizResponse>> pendingAsync =
+        ref.watch(doctorPendingReviewsProvider(doctorId));
+
+    return pendingAsync.maybeWhen(
+      data: (List<QuizResponse> responses) {
+        final int flagged = responses.where(_hasQ9Flag).length;
+        if (flagged == 0) return const SizedBox.shrink();
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Material(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.danger.withOpacity(0.08),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {}, // scrolls to pending section — future enhancement
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.danger.withOpacity(0.35), width: 1.5),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    const Icon(Icons.warning_amber_rounded,
+                        color: AppColors.danger, size: 22),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        flagged == 1
+                            ? 'Q9 alert — 1 patient indicated suicidal ideation. Review immediately.'
+                            : 'Q9 alert — $flagged patients indicated suicidal ideation. Review immediately.',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.danger,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(Icons.chevron_right_rounded,
+                        color: AppColors.danger, size: 20),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
+    );
+  }
+
+  static bool _hasQ9Flag(QuizResponse r) {
+    if (r.quizId != 'preset_phq9') return false;
+    final answer = r.answerFor('phq9_q9');
+    if (answer == null) return false;
+    // Option '0' = "Not at all" (safe). Any other selected option triggers alert.
+    return answer.selectedOptionIds.isNotEmpty &&
+        !answer.selectedOptionIds.contains('0');
   }
 }
 
@@ -249,6 +324,12 @@ class _PendingReviewCard extends ConsumerWidget {
         patientAsync.value?.displayName ?? 'Patient';
     final String firstName = patientName.split(' ').first;
 
+    // Whether this response has a Q9 flag
+    final bool q9Flag = response.quizId == 'preset_phq9' &&
+        (response.answerFor('phq9_q9')?.selectedOptionIds
+                .any((id) => id != '0') ??
+            false);
+
     return SizedBox(
       width: 210,
       child: Card(
@@ -257,7 +338,10 @@ class _PendingReviewCard extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: Theme.of(context).dividerColor,
+            color: q9Flag
+                ? AppColors.danger.withOpacity(0.4)
+                : Theme.of(context).dividerColor,
+            width: q9Flag ? 1.5 : 1,
           ),
         ),
         child: Padding(
@@ -270,8 +354,8 @@ class _PendingReviewCard extends ConsumerWidget {
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: const BoxDecoration(
-                      color: AppColors.warning,
+                    decoration: BoxDecoration(
+                      color: q9Flag ? AppColors.danger : AppColors.warning,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -298,6 +382,12 @@ class _PendingReviewCard extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  if (q9Flag)
+                    const Tooltip(
+                      message: 'Q9: suicidal ideation flagged',
+                      child: Icon(Icons.warning_amber_rounded,
+                          size: 16, color: AppColors.danger),
+                    ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -333,7 +423,7 @@ class _PendingReviewCard extends ConsumerWidget {
                     pathParameters: <String, String>{'responseId': response.id},
                   ),
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: q9Flag ? AppColors.danger : AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -370,18 +460,57 @@ class _PatientList extends ConsumerWidget {
       data: (List<AppUser> patients) {
         final List<Assignment> assignments = assignmentsAsync.value ?? <Assignment>[];
 
-        return Column(
-          children: <Widget>[
-            for (final AppUser p in patients) ...<Widget>[
-              _PatientRow(
-                patient: p,
-                assignments: assignments
-                    .where((Assignment a) => a.patientId == p.id)
-                    .toList(),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ],
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final bool isWide = constraints.maxWidth >= 720;
+            if (isWide) {
+              // 2-column grid on tablet / desktop
+              return _PatientGrid(patients: patients, assignments: assignments);
+            }
+            return Column(
+              children: <Widget>[
+                for (final AppUser p in patients) ...<Widget>[
+                  _PatientRow(
+                    patient: p,
+                    assignments: assignments
+                        .where((Assignment a) => a.patientId == p.id)
+                        .toList(),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class _PatientGrid extends StatelessWidget {
+  const _PatientGrid({required this.patients, required this.assignments});
+  final List<AppUser> patients;
+  final List<Assignment> assignments;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 8,
+        childAspectRatio: 3.2,
+      ),
+      itemCount: patients.length,
+      itemBuilder: (BuildContext context, int index) {
+        final AppUser p = patients[index];
+        return _PatientRow(
+          patient: p,
+          assignments: assignments
+              .where((Assignment a) => a.patientId == p.id)
+              .toList(),
         );
       },
     );
@@ -449,6 +578,7 @@ class _PatientRow extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(patient.displayName,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -463,6 +593,7 @@ class _PatientRow extends StatelessWidget {
                                   .onSurface
                                   .withValues(alpha: 0.55),
                             ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                   ],
                 ),

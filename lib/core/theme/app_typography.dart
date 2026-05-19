@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
 /// Typography scale. Body sizes are deliberately larger than the Material
 /// default to reduce reading effort for elderly or visually impaired
-/// patients. Headings use Inter SemiBold/Bold.
+/// patients. Headings use Poppins SemiBold/Bold.
 class AppTypography {
   const AppTypography._();
 
-  static const String fontFamily = 'Inter';
+  // Resolved once; google_fonts registers the family under this key.
+  static final String fontFamily = GoogleFonts.poppins().fontFamily!;
 
   static TextTheme lightTextTheme() => _buildTextTheme(
         primary: AppColors.lightTextPrimary,
