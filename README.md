@@ -1,6 +1,6 @@
 # MedQuiz
 
-[![CI](https://github.com/omprxkash/medquiz/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/medquiz/actions/workflows/ci.yml)
+[![CI](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml)
 [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -23,8 +23,8 @@ That's it. No complex setup, no backend required to try it — everything runs i
 You'll need Flutter 3.44+. Then:
 
 ```bash
-git clone https://github.com/omprxkash/medquiz.git
-cd medquiz
+git clone https://github.com/omprxkash/flutter-app-hci.git
+cd flutter-app-hci
 flutter pub get
 flutter run -d chrome
 ```
