@@ -30,10 +30,7 @@ class QuestionCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text(
-          question.text,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
+        Text(question.text, style: Theme.of(context).textTheme.headlineMedium),
         if (question.helpText != null) ...<Widget>[
           const SizedBox(height: 8),
           Text(
@@ -53,15 +50,19 @@ class QuestionCard extends StatelessWidget {
       case QuestionType.likert5:
         return LikertScaleField(
           options: question.options,
-          selectedId: current.selectedOptionIds.isEmpty ? null : current.selectedOptionIds.first,
-          onChanged: (String id) => onChanged(current.copyWith(selectedOptionIds: <String>[id])),
+          selectedId: current.selectedOptionIds.isEmpty
+              ? null
+              : current.selectedOptionIds.first,
+          onChanged: (String id) =>
+              onChanged(current.copyWith(selectedOptionIds: <String>[id])),
         );
 
       case QuestionType.singleChoice:
         return MultipleChoiceField(
           options: question.options,
           selectedIds: current.selectedOptionIds,
-          onChanged: (List<String> ids) => onChanged(current.copyWith(selectedOptionIds: ids)),
+          onChanged: (List<String> ids) =>
+              onChanged(current.copyWith(selectedOptionIds: ids)),
         );
 
       case QuestionType.multiSelect:
@@ -69,14 +70,18 @@ class QuestionCard extends StatelessWidget {
           options: question.options,
           selectedIds: current.selectedOptionIds,
           allowMultiple: true,
-          onChanged: (List<String> ids) => onChanged(current.copyWith(selectedOptionIds: ids)),
+          onChanged: (List<String> ids) =>
+              onChanged(current.copyWith(selectedOptionIds: ids)),
         );
 
       case QuestionType.yesNo:
         return YesNoField(
           options: question.options,
-          selectedId: current.selectedOptionIds.isEmpty ? null : current.selectedOptionIds.first,
-          onChanged: (String id) => onChanged(current.copyWith(selectedOptionIds: <String>[id])),
+          selectedId: current.selectedOptionIds.isEmpty
+              ? null
+              : current.selectedOptionIds.first,
+          onChanged: (String id) =>
+              onChanged(current.copyWith(selectedOptionIds: <String>[id])),
         );
 
       case QuestionType.numeric:
@@ -95,4 +100,3 @@ class QuestionCard extends StatelessWidget {
     }
   }
 }
-

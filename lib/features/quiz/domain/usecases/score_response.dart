@@ -26,7 +26,8 @@ class ScoreResponse {
 
       int subtotal = 0;
       for (final String optionId in ans.selectedOptionIds) {
-        final int score = q.options
+        final int score =
+            q.options
                 .where((opt) => opt.id == optionId)
                 .map((opt) => opt.score)
                 .firstOrNull() ??
@@ -43,7 +44,8 @@ class ScoreResponse {
         // Defensive: clamp to a single option's worth even if multiple were
         // somehow set.
         final int singleScore =
-            subtotal ~/ (ans.selectedOptionIds.isEmpty ? 1 : ans.selectedOptionIds.length);
+            subtotal ~/
+            (ans.selectedOptionIds.isEmpty ? 1 : ans.selectedOptionIds.length);
         total += (singleScore * q.weight).round();
       } else {
         total += (subtotal * q.weight).round();

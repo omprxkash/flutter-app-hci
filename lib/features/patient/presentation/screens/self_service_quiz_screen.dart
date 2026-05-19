@@ -60,10 +60,7 @@ class SelfServiceQuizScreen extends ConsumerWidget {
                         const SizedBox(height: 6),
                         Text(
                           'Clinically validated assessments — no referral needed.',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.white70,
-                          ),
+                          style: TextStyle(fontSize: 13, color: Colors.white70),
                         ),
                       ],
                     ),
@@ -123,8 +120,9 @@ class SelfServiceQuizScreen extends ConsumerWidget {
       assignedAt: DateTime.now(),
     );
 
-    final result =
-        await ref.read(quizRepositoryProvider).createAssignment(assignment);
+    final result = await ref
+        .read(quizRepositoryProvider)
+        .createAssignment(assignment);
 
     if (!context.mounted) return;
 
@@ -135,9 +133,9 @@ class SelfServiceQuizScreen extends ConsumerWidget {
           pathParameters: <String, String>{'assignmentId': data.id},
         );
       case Err<Assignment, Failure>(:final Failure failure):
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
     }
   }
 }
@@ -173,7 +171,8 @@ class _QuizCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final meta = _meta[quiz.id] ??
+    final meta =
+        _meta[quiz.id] ??
         const _QuizMeta(
           icon: Icons.assignment_outlined,
           color: Color(0xFF2E5BFF),
@@ -222,7 +221,9 @@ class _QuizCard extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
                         decoration: BoxDecoration(
                           color: meta.color.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
@@ -285,10 +286,7 @@ class _QuizCard extends StatelessWidget {
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: Text(
                   'Start Assessment',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: meta.color,
@@ -309,11 +307,7 @@ class _QuizCard extends StatelessWidget {
 }
 
 class _Chip extends StatelessWidget {
-  const _Chip({
-    required this.icon,
-    required this.label,
-    required this.color,
-  });
+  const _Chip({required this.icon, required this.label, required this.color});
   final IconData icon;
   final String label;
   final Color color;
@@ -358,8 +352,11 @@ class _DisclaimerBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Icon(Icons.info_outline_rounded,
-              size: 18, color: Color(0xFFF9A825)),
+          const Icon(
+            Icons.info_outline_rounded,
+            size: 18,
+            color: Color(0xFFF9A825),
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(

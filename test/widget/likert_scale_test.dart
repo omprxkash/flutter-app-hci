@@ -11,7 +11,9 @@ void main() {
     QuestionOption(id: '3', label: 'Nearly every day', score: 3),
   ];
 
-  testWidgets('renders one row per option and reports the tapped id', (WidgetTester tester) async {
+  testWidgets('renders one row per option and reports the tapped id', (
+    WidgetTester tester,
+  ) async {
     String? tapped;
     await tester.pumpWidget(
       MaterialApp(
@@ -33,7 +35,9 @@ void main() {
     expect(tapped, '1');
   });
 
-  testWidgets('selected option shows the filled radio icon', (WidgetTester tester) async {
+  testWidgets('selected option shows the filled radio icon', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(

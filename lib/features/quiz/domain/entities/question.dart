@@ -43,14 +43,14 @@ class Question extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        id,
-        text,
-        type,
-        options,
-        required,
-        helpText,
-        minValue,
-        maxValue,
-        weight,
-      ];
+    id,
+    text,
+    type,
+    options,
+    required,
+    helpText,
+    minValue,
+    maxValue,
+    weight,
+  ];
 }

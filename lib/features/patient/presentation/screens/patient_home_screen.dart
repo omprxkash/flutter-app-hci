@@ -40,20 +40,26 @@ class PatientHomeScreen extends ConsumerWidget {
       backgroundColor: const Color(0xFFF7F8FB),
       body: Consumer(
         builder: (context, ref, _) {
-          final assignmentsAsync = ref.watch(patientAssignmentsProvider(patientId));
+          final assignmentsAsync = ref.watch(
+            patientAssignmentsProvider(patientId),
+          );
           return assignmentsAsync.when(
             loading: () => const LoadingIndicator(),
             error: (e, _) => Center(child: Text(e.toString())),
             data: (List<Assignment> all) {
               final pending = all
-                  .where((a) =>
-                      a.status == AssignmentStatus.pending ||
-                      a.status == AssignmentStatus.inProgress)
+                  .where(
+                    (a) =>
+                        a.status == AssignmentStatus.pending ||
+                        a.status == AssignmentStatus.inProgress,
+                  )
                   .toList();
               final done = all
-                  .where((a) =>
-                      a.status == AssignmentStatus.completed ||
-                      a.status == AssignmentStatus.reviewed)
+                  .where(
+                    (a) =>
+                        a.status == AssignmentStatus.completed ||
+                        a.status == AssignmentStatus.reviewed,
+                  )
                   .toList();
 
               return CustomScrollView(
@@ -98,7 +104,9 @@ class PatientHomeScreen extends ConsumerWidget {
                                       label: 'Pending',
                                       color: pending.isEmpty
                                           ? Colors.white.withOpacity(0.15)
-                                          : const Color(0xFFFFBF47).withOpacity(0.25),
+                                          : const Color(
+                                              0xFFFFBF47,
+                                            ).withOpacity(0.25),
                                       textColor: pending.isEmpty
                                           ? Colors.white.withOpacity(0.65)
                                           : const Color(0xFFFFD76E),
@@ -134,10 +142,12 @@ class PatientHomeScreen extends ConsumerWidget {
                               icon: Icons.pending_actions_rounded,
                             ),
                             const SizedBox(height: 12),
-                            ...pending.map((a) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 14),
-                                  child: _PendingCard(assignment: a),
-                                )),
+                            ...pending.map(
+                              (a) => Padding(
+                                padding: const EdgeInsets.only(bottom: 14),
+                                child: _PendingCard(assignment: a),
+                              ),
+                            ),
                           ],
                           if (done.isNotEmpty) ...[
                             const SizedBox(height: 8),
@@ -147,10 +157,14 @@ class PatientHomeScreen extends ConsumerWidget {
                               icon: Icons.check_circle_outline_rounded,
                             ),
                             const SizedBox(height: 12),
-                            ...done.take(5).map((a) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: _CompletedCard(assignment: a),
-                                )),
+                            ...done
+                                .take(5)
+                                .map(
+                                  (a) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: _CompletedCard(assignment: a),
+                                  ),
+                                ),
                           ],
                         ],
                       ]),
@@ -249,10 +263,7 @@ class _EmptyState extends StatelessWidget {
               icon: const Icon(Icons.play_arrow_rounded),
               label: const Text(
                 'Start a Self-Check',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2E7D32),
@@ -269,10 +280,7 @@ class _EmptyState extends StatelessWidget {
           const Text(
             'Have a doctor\'s invite code? Go to Profile → Connect.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: Color(0xFF9EA5B8),
-            ),
+            style: TextStyle(fontSize: 12, color: Color(0xFF9EA5B8)),
           ),
         ],
       ),
@@ -400,7 +408,11 @@ class _PendingCard extends StatelessWidget {
                             color: accent.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Icon(Icons.assignment_outlined, color: accent, size: 26),
+                          child: Icon(
+                            Icons.assignment_outlined,
+                            color: accent,
+                            size: 26,
+                          ),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
@@ -419,11 +431,13 @@ class _PendingCard extends StatelessWidget {
                                 overdue
                                     ? 'Overdue — was due ${DateFormatters.relative(assignment.dueAt!)}'
                                     : assignment.dueAt == null
-                                        ? 'Assigned ${DateFormatters.relative(assignment.assignedAt)}'
-                                        : 'Due ${DateFormatters.short(assignment.dueAt!)}',
+                                    ? 'Assigned ${DateFormatters.relative(assignment.assignedAt)}'
+                                    : 'Due ${DateFormatters.short(assignment.dueAt!)}',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: overdue ? AppColors.danger : const Color(0xFF52596B),
+                                  color: overdue
+                                      ? AppColors.danger
+                                      : const Color(0xFF52596B),
                                 ),
                               ),
                             ],
@@ -431,17 +445,24 @@ class _PendingCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (assignment.notes != null && assignment.notes!.isNotEmpty) ...<Widget>[
+                    if (assignment.notes != null &&
+                        assignment.notes!.isNotEmpty) ...<Widget>[
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF0F2FF),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           assignment.notes!,
-                          style: const TextStyle(fontSize: 13, color: Color(0xFF52596B)),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF52596B),
+                          ),
                         ),
                       ),
                     ],
@@ -449,7 +470,9 @@ class _PendingCard extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () => context.pushNamed(
                         RouteNames.takeQuiz,
-                        pathParameters: <String, String>{'assignmentId': assignment.id},
+                        pathParameters: <String, String>{
+                          'assignmentId': assignment.id,
+                        },
                       ),
                       icon: const Icon(Icons.play_arrow_rounded),
                       label: const Text(
@@ -498,9 +521,11 @@ class _CompletedCard extends StatelessWidget {
         onTap: assignment.responseId == null
             ? null
             : () => context.pushNamed(
-                  RouteNames.quizResult,
-                  pathParameters: <String, String>{'responseId': assignment.responseId!},
-                ),
+                RouteNames.quizResult,
+                pathParameters: <String, String>{
+                  'responseId': assignment.responseId!,
+                },
+              ),
         child: Container(
           decoration: const BoxDecoration(
             border: Border(
@@ -516,11 +541,16 @@ class _CompletedCard extends StatelessWidget {
                 Container(width: 4, color: accent),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     child: Row(
                       children: <Widget>[
                         Icon(
-                          reviewed ? Icons.check_circle_rounded : Icons.hourglass_top_rounded,
+                          reviewed
+                              ? Icons.check_circle_rounded
+                              : Icons.hourglass_top_rounded,
                           color: accent,
                           size: 22,
                         ),
@@ -547,7 +577,10 @@ class _CompletedCard extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: accent.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20),
@@ -563,8 +596,11 @@ class _CompletedCard extends StatelessWidget {
                         ),
                         if (assignment.responseId != null) ...<Widget>[
                           const SizedBox(width: 4),
-                          Icon(Icons.chevron_right_rounded,
-                              size: 20, color: Colors.grey.shade400),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            size: 20,
+                            color: Colors.grey.shade400,
+                          ),
                         ],
                       ],
                     ),

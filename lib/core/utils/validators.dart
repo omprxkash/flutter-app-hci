@@ -10,14 +10,22 @@ class Validators {
     return null;
   }
 
-  static String? minLength(String? value, int min, {String label = 'This field'}) {
+  static String? minLength(
+    String? value,
+    int min, {
+    String label = 'This field',
+  }) {
     if (value == null || value.length < min) {
       return '$label must be at least $min characters.';
     }
     return null;
   }
 
-  static String? maxLength(String? value, int max, {String label = 'This field'}) {
+  static String? maxLength(
+    String? value,
+    int max, {
+    String label = 'This field',
+  }) {
     if (value != null && value.length > max) {
       return '$label must be no more than $max characters.';
     }
@@ -28,7 +36,8 @@ class Validators {
   /// Accepts 10-15 digits after normalization. Intentionally permissive — the
   /// SMS provider is the source of truth.
   static String? phone(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Phone number is required.';
+    if (value == null || value.trim().isEmpty)
+      return 'Phone number is required.';
     final String digits = value.replaceAll(RegExp(r'[^0-9]'), '');
     if (digits.length < 10 || digits.length > 15) {
       return 'Enter a valid phone number.';
@@ -46,8 +55,10 @@ class Validators {
   static String? password(String? value) {
     if (value == null || value.isEmpty) return 'Password is required.';
     if (value.length < 8) return 'Password must be at least 8 characters.';
-    if (!value.contains(RegExp('[A-Z]'))) return 'Password must contain an uppercase letter.';
-    if (!value.contains(RegExp('[0-9]'))) return 'Password must contain a digit.';
+    if (!value.contains(RegExp('[A-Z]')))
+      return 'Password must contain an uppercase letter.';
+    if (!value.contains(RegExp('[0-9]')))
+      return 'Password must contain a digit.';
     return null;
   }
 
@@ -63,12 +74,16 @@ class Validators {
   static String? age(String? value) {
     if (value == null || value.trim().isEmpty) return 'Age is required.';
     final int? age = int.tryParse(value.trim());
-    if (age == null || age < 0 || age > 130) return 'Enter a valid age (0-130).';
+    if (age == null || age < 0 || age > 130)
+      return 'Enter a valid age (0-130).';
     return null;
   }
 
   /// Compose multiple validators. Returns the first non-null error.
-  static String? compose(String? value, List<String? Function(String?)> validators) {
+  static String? compose(
+    String? value,
+    List<String? Function(String?)> validators,
+  ) {
     for (final String? Function(String?) v in validators) {
       final String? result = v(value);
       if (result != null) return result;

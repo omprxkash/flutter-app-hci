@@ -21,7 +21,10 @@ abstract class QuizRepository {
 
   Stream<List<Assignment>> watchAssignmentsForDoctor(String doctorId);
 
-  Future<Result<Assignment, Failure>> getAssignment(String patientId, String assignmentId);
+  Future<Result<Assignment, Failure>> getAssignment(
+    String patientId,
+    String assignmentId,
+  );
 
   Future<Result<Assignment, Failure>> createAssignment(Assignment assignment);
 

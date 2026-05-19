@@ -78,19 +78,22 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
       _serverError = null;
     });
 
-    final Result<AppUser, Failure> r =
-        await ref.read(authControllerProvider.notifier).verifyOtp(
-              verificationId: widget.verificationId,
-              smsCode: _otpController.text.trim(),
-              registration: widget.registration,
-            );
+    final Result<AppUser, Failure> r = await ref
+        .read(authControllerProvider.notifier)
+        .verifyOtp(
+          verificationId: widget.verificationId,
+          smsCode: _otpController.text.trim(),
+          registration: widget.registration,
+        );
 
     if (!mounted) return;
     setState(() => _isSubmitting = false);
 
     switch (r) {
       case Success<AppUser, Failure>(:final AppUser data):
-        context.goNamed(data.isDoctor ? RouteNames.doctorDashboard : RouteNames.patientHome);
+        context.goNamed(
+          data.isDoctor ? RouteNames.doctorDashboard : RouteNames.patientHome,
+        );
       case Err<AppUser, Failure>(:final Failure failure):
         setState(() => _serverError = failure.message);
     }
@@ -126,8 +129,14 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
               maxLength: 6,
               textAlign: TextAlign.center,
               autofocus: true,
-              style: const TextStyle(fontSize: 28, letterSpacing: 12, fontWeight: FontWeight.w600),
-              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+              style: const TextStyle(
+                fontSize: 28,
+                letterSpacing: 12,
+                fontWeight: FontWeight.w600,
+              ),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+              ],
               decoration: const InputDecoration(
                 counterText: '',
                 hintText: '••••••',

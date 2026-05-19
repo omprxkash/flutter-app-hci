@@ -24,7 +24,8 @@ class InMemoryAuthRepository implements AuthRepository {
       StreamController<AppUser?>.broadcast();
   final Map<String, AppUser> _usersById = <String, AppUser>{};
   final Map<String, String> _doctorPasswords = <String, String>{};
-  final Map<String, String> _pendingPhones = <String, String>{}; // verificationId -> phone
+  final Map<String, String> _pendingPhones =
+      <String, String>{}; // verificationId -> phone
   final Uuid _uuid = const Uuid();
   AppUser? _current;
 
@@ -75,7 +76,9 @@ class InMemoryAuthRepository implements AuthRepository {
     }
     final String? phone = _pendingPhones.remove(verificationId);
     if (phone == null) {
-      return const Err<AppUser, Failure>(AuthFailure('Verification session expired.'));
+      return const Err<AppUser, Failure>(
+        AuthFailure('Verification session expired.'),
+      );
     }
 
     AppUser? existing = _usersById.values
@@ -113,13 +116,16 @@ class InMemoryAuthRepository implements AuthRepository {
     await Future<void>.delayed(const Duration(milliseconds: 300));
     final String? expected = _doctorPasswords[email];
     if (expected == null) {
-      return const Err<AppUser, Failure>(NotFoundFailure('No account with that email.'));
+      return const Err<AppUser, Failure>(
+        NotFoundFailure('No account with that email.'),
+      );
     }
     if (expected != password) {
       return const Err<AppUser, Failure>(AuthFailure('Incorrect password.'));
     }
-    final AppUser doctor = _usersById.values
-        .firstWhere((AppUser u) => u.isDoctor && u.email == email);
+    final AppUser doctor = _usersById.values.firstWhere(
+      (AppUser u) => u.isDoctor && u.email == email,
+    );
     _setCurrent(doctor);
     return Success<AppUser, Failure>(doctor);
   }
@@ -133,7 +139,9 @@ class InMemoryAuthRepository implements AuthRepository {
     required String licenseNumber,
   }) async {
     if (_doctorPasswords.containsKey(email)) {
-      return const Err<AppUser, Failure>(AuthFailure('An account with that email already exists.'));
+      return const Err<AppUser, Failure>(
+        AuthFailure('An account with that email already exists.'),
+      );
     }
     final AppUser doctor = AppUser(
       id: _uuid.v4(),
@@ -168,7 +176,9 @@ class InMemoryAuthRepository implements AuthRepository {
     await Future<void>.delayed(const Duration(milliseconds: 150));
     final AppUser? user = _usersById[userId];
     if (user == null || !user.isPatient) {
-      return const Err<AppUser, Failure>(NotFoundFailure('Demo patient not found.'));
+      return const Err<AppUser, Failure>(
+        NotFoundFailure('Demo patient not found.'),
+      );
     }
     _setCurrent(user);
     return Success<AppUser, Failure>(user);

@@ -10,18 +10,18 @@ class UserDto {
   const UserDto._();
 
   static Map<String, dynamic> toMap(AppUser u) => <String, dynamic>{
-        'role': u.role.wireName,
-        'displayName': u.displayName,
-        'phone': u.phone,
-        'email': u.email,
-        'age': u.age,
-        'gender': u.gender,
-        'doctorId': u.doctorId,
-        'specialty': u.specialty,
-        'licenseNumber': u.licenseNumber,
-        'preferredLocale': u.preferredLocale,
-        'createdAt': Timestamp.fromDate(u.createdAt),
-      };
+    'role': u.role.wireName,
+    'displayName': u.displayName,
+    'phone': u.phone,
+    'email': u.email,
+    'age': u.age,
+    'gender': u.gender,
+    'doctorId': u.doctorId,
+    'specialty': u.specialty,
+    'licenseNumber': u.licenseNumber,
+    'preferredLocale': u.preferredLocale,
+    'createdAt': Timestamp.fromDate(u.createdAt),
+  };
 
   static AppUser fromMap(String id, Map<String, dynamic> m) {
     return AppUser(

@@ -60,19 +60,23 @@ class _YesNoButton extends StatelessWidget {
               ? AppColors.primary.withValues(alpha: 0.1)
               : Theme.of(context).colorScheme.surface,
           border: Border.all(
-            color: selected ? AppColors.primary : Theme.of(context).dividerColor,
+            color: selected
+                ? AppColors.primary
+                : Theme.of(context).dividerColor,
             width: selected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
-        constraints: const BoxConstraints(minHeight: AppConstants.minTapTargetDp + 24),
+        constraints: const BoxConstraints(
+          minHeight: AppConstants.minTapTargetDp + 24,
+        ),
         child: Text(
           option.label,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: selected ? AppColors.primary : null,
-                fontWeight: FontWeight.w600,
-              ),
+            color: selected ? AppColors.primary : null,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );

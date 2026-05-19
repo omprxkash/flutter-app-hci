@@ -36,14 +36,16 @@ class ScoreBadge extends StatelessWidget {
           Text(
             maxScore == null ? '$score' : '$score / $maxScore',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.w700,
-                ),
+              color: color,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(width: 8),
           Text(
             text,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(color: color),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(color: color),
           ),
         ],
       ),

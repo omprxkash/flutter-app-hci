@@ -25,7 +25,13 @@ class SeverityBand extends Equatable {
   bool contains(int score) => score >= minInclusive && score <= maxInclusive;
 
   @override
-  List<Object?> get props => <Object?>[label, minInclusive, maxInclusive, color.toARGB32(), guidance];
+  List<Object?> get props => <Object?>[
+    label,
+    minInclusive,
+    maxInclusive,
+    color.toARGB32(),
+    guidance,
+  ];
 }
 
 /// Standard 5-band scale used by PHQ-9. Other instruments reuse subsets.

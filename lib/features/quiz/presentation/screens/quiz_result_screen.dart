@@ -41,10 +41,16 @@ class QuizResultScreen extends ConsumerWidget {
   }
 
   Widget _buildContent(
-      BuildContext context, WidgetRef ref, QuizResponse response, Quiz quiz) {
+    BuildContext context,
+    WidgetRef ref,
+    QuizResponse response,
+    Quiz quiz,
+  ) {
     final SeverityBand? band = quiz.bandFor(response.autoScore);
     final Color tone = band?.color ?? AppColors.info;
-    final Review? review = ref.watch(reviewForResponseProvider(responseId)).value;
+    final Review? review = ref
+        .watch(reviewForResponseProvider(responseId))
+        .value;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7FAFC),
@@ -56,8 +62,10 @@ class QuizResultScreen extends ConsumerWidget {
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.transparent,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                  color: Color(0xFF0A0A0A)),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Color(0xFF0A0A0A),
+              ),
               onPressed: () => context.goNamed(RouteNames.patientHome),
             ),
             title: const Text(
@@ -78,7 +86,6 @@ class QuizResultScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 40),
             sliver: SliverList(
               delegate: SliverChildListDelegate(<Widget>[
-
                 // ── Score hero card ───────────────────────────────
                 Container(
                   width: double.infinity,
@@ -94,7 +101,9 @@ class QuizResultScreen extends ConsumerWidget {
                         children: <Widget>[
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(20),
@@ -110,8 +119,11 @@ class QuizResultScreen extends ConsumerWidget {
                             ),
                           ),
                           const Spacer(),
-                          const Icon(Icons.check_circle_rounded,
-                              color: Colors.white, size: 22),
+                          const Icon(
+                            Icons.check_circle_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -206,13 +218,15 @@ class QuizResultScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: AppColors.info.withOpacity(0.07),
                     borderRadius: BorderRadius.circular(12),
-                    border:
-                        Border.all(color: AppColors.info.withOpacity(0.18)),
+                    border: Border.all(color: AppColors.info.withOpacity(0.18)),
                   ),
                   child: Row(
                     children: <Widget>[
-                      const Icon(Icons.info_outline_rounded,
-                          color: AppColors.info, size: 18),
+                      const Icon(
+                        Icons.info_outline_rounded,
+                        color: AppColors.info,
+                        size: 18,
+                      ),
                       const SizedBox(width: 10),
                       const Expanded(
                         child: Text(
@@ -242,14 +256,14 @@ class QuizResultScreen extends ConsumerWidget {
                               width: 36,
                               height: 36,
                               decoration: BoxDecoration(
-                                color: AppColors.secondary
-                                    .withOpacity(0.12),
+                                color: AppColors.secondary.withOpacity(0.12),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Icon(
-                                  Icons.medical_services_rounded,
-                                  color: AppColors.secondary,
-                                  size: 18),
+                                Icons.medical_services_rounded,
+                                color: AppColors.secondary,
+                                size: 18,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             const Text(
@@ -262,12 +276,15 @@ class QuizResultScreen extends ConsumerWidget {
                             ),
                           ],
                         ),
-                        if (review.finalScore != response.autoScore) ...<Widget>[
+                        if (review.finalScore !=
+                            response.autoScore) ...<Widget>[
                           const SizedBox(height: 14),
                           Row(
                             children: <Widget>[
-                              const Text('Reviewed score: ',
-                                  style: TextStyle(fontSize: 14)),
+                              const Text(
+                                'Reviewed score: ',
+                                style: TextStyle(fontSize: 14),
+                              ),
                               Text(
                                 '${review.finalScore}',
                                 style: const TextStyle(
@@ -277,8 +294,10 @@ class QuizResultScreen extends ConsumerWidget {
                                 ),
                               ),
                               if (response.maxPossibleScore != null)
-                                Text(' / ${response.maxPossibleScore}',
-                                    style: const TextStyle(fontSize: 14)),
+                                Text(
+                                  ' / ${response.maxPossibleScore}',
+                                  style: const TextStyle(fontSize: 14),
+                                ),
                             ],
                           ),
                         ],
@@ -292,9 +311,10 @@ class QuizResultScreen extends ConsumerWidget {
                               color: const Color(0xFFF7FAFC),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Text(review.notes!,
-                                style: const TextStyle(
-                                    fontSize: 14, height: 1.5)),
+                            child: Text(
+                              review.notes!,
+                              style: const TextStyle(fontSize: 14, height: 1.5),
+                            ),
                           ),
                         ],
                         if (review.recommendedFollowUpInDays !=
@@ -302,16 +322,23 @@ class QuizResultScreen extends ConsumerWidget {
                           const SizedBox(height: 14),
                           Row(
                             children: <Widget>[
-                              const Icon(Icons.calendar_today_rounded,
-                                  size: 16, color: AppColors.primary),
+                              const Icon(
+                                Icons.calendar_today_rounded,
+                                size: 16,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(width: 8),
-                              const Text('Follow-up: ',
-                                  style: TextStyle(fontSize: 14)),
+                              const Text(
+                                'Follow-up: ',
+                                style: TextStyle(fontSize: 14),
+                              ),
                               Text(
                                 DateFormat('MMM d, yyyy').format(
-                                  review.reviewedAt.add(Duration(
-                                      days: review
-                                          .recommendedFollowUpInDays!)),
+                                  review.reviewedAt.add(
+                                    Duration(
+                                      days: review.recommendedFollowUpInDays!,
+                                    ),
+                                  ),
                                 ),
                                 style: const TextStyle(
                                   fontSize: 14,
@@ -333,8 +360,7 @@ class QuizResultScreen extends ConsumerWidget {
                   icon: const Icon(Icons.home_rounded),
                   label: const Text(
                     'Back to Home',
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   style: FilledButton.styleFrom(
                     backgroundColor: const Color(0xFF0A0A0A),
@@ -388,8 +414,7 @@ class _SeverityScale extends StatelessWidget {
     final int minScore = bands.first.minInclusive;
     final int maxScore = bands.last.maxInclusive;
     final int range = (maxScore - minScore).clamp(1, 1 << 30);
-    final double markerPos =
-        ((score - minScore) / range).clamp(0.0, 1.0);
+    final double markerPos = ((score - minScore) / range).clamp(0.0, 1.0);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints c) {
@@ -406,7 +431,9 @@ class _SeverityScale extends StatelessWidget {
                     for (final SeverityBand b in bands)
                       Expanded(
                         flex: (b.maxInclusive - b.minInclusive + 1),
-                        child: Container(color: b.color.withValues(alpha: 0.85)),
+                        child: Container(
+                          color: b.color.withValues(alpha: 0.85),
+                        ),
                       ),
                   ],
                 ),

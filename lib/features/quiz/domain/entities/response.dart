@@ -43,16 +43,16 @@ class QuizResponse extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        id,
-        assignmentId,
-        quizId,
-        patientId,
-        doctorId,
-        answers,
-        submittedAt,
-        autoScore,
-        maxPossibleScore,
-        severityLabel,
-        durationSeconds,
-      ];
+    id,
+    assignmentId,
+    quizId,
+    patientId,
+    doctorId,
+    answers,
+    submittedAt,
+    autoScore,
+    maxPossibleScore,
+    severityLabel,
+    durationSeconds,
+  ];
 }

@@ -141,14 +141,16 @@ class PresetQuizzes {
           minInclusive: 10,
           maxInclusive: 14,
           color: AppColors.severityModerate,
-          guidance: 'Possible clinically significant anxiety; further evaluation recommended.',
+          guidance:
+              'Possible clinically significant anxiety; further evaluation recommended.',
         ),
         SeverityBand(
           label: 'Severe',
           minInclusive: 15,
           maxInclusive: 21,
           color: AppColors.severitySevere,
-          guidance: 'Active treatment with pharmacotherapy and/or psychotherapy is likely needed.',
+          guidance:
+              'Active treatment with pharmacotherapy and/or psychotherapy is likely needed.',
         ),
       ],
     );
@@ -256,7 +258,8 @@ class PresetQuizzes {
         // Attention and calculation (5 points) — serial 7s
         const Question(
           id: 'mmse_serial7',
-          text: 'Subtract 7 from 100, and keep subtracting 7. (e.g. 93, 86, 79, 72, 65)',
+          text:
+              'Subtract 7 from 100, and keep subtracting 7. (e.g. 93, 86, 79, 72, 65)',
           type: QuestionType.numeric,
           helpText: 'Score 1 point per correct subtraction up to 5.',
           minValue: 0,
@@ -275,7 +278,8 @@ class PresetQuizzes {
         // reading (1), writing (1)
         const Question(
           id: 'mmse_language',
-          text: 'Language tasks: naming objects, repeating a phrase, following a 3-stage command, reading a sentence, writing a sentence.',
+          text:
+              'Language tasks: naming objects, repeating a phrase, following a 3-stage command, reading a sentence, writing a sentence.',
           type: QuestionType.numeric,
           helpText: 'Sum of language sub-scores (0-8).',
           minValue: 0,
@@ -295,7 +299,8 @@ class PresetQuizzes {
           minInclusive: 0,
           maxInclusive: 9,
           color: AppColors.severitySevere,
-          guidance: 'Severe cognitive impairment likely. Specialist referral indicated.',
+          guidance:
+              'Severe cognitive impairment likely. Specialist referral indicated.',
         ),
         SeverityBand(
           label: 'Moderate impairment',
@@ -309,7 +314,8 @@ class PresetQuizzes {
           minInclusive: 19,
           maxInclusive: 23,
           color: AppColors.severityMild,
-          guidance: 'Possible mild cognitive impairment; consider repeat testing in 6-12 months.',
+          guidance:
+              'Possible mild cognitive impairment; consider repeat testing in 6-12 months.',
         ),
         SeverityBand(
           label: 'Normal',

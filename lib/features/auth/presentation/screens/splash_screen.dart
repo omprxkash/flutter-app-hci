@@ -15,7 +15,10 @@ class SplashScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<Object?>>(authStateChangesProvider, (Object? _, AsyncValue<Object?> next) {
+    ref.listen<AsyncValue<Object?>>(authStateChangesProvider, (
+      Object? _,
+      AsyncValue<Object?> next,
+    ) {
       next.whenData((Object? user) {
         if (!context.mounted) return;
         if (user == null) {
@@ -25,7 +28,9 @@ class SplashScreen extends ConsumerWidget {
         // Pattern-match by user's role via a duck-typed check.
         final dynamic dynUser = user;
         final bool isDoctor = (dynUser.isDoctor as bool?) ?? false;
-        context.goNamed(isDoctor ? RouteNames.doctorDashboard : RouteNames.patientHome);
+        context.goNamed(
+          isDoctor ? RouteNames.doctorDashboard : RouteNames.patientHome,
+        );
       });
     });
 
@@ -35,15 +40,18 @@ class SplashScreen extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Icon(Icons.medical_services_rounded,
-                size: 96, color: Colors.white),
+            const Icon(
+              Icons.medical_services_rounded,
+              size: 96,
+              color: Colors.white,
+            ),
             const SizedBox(height: 24),
             Text(
               'MedQuiz',
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(

@@ -46,10 +46,7 @@ class RoleSelectionScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   const Text(
                     'Psychiatric screening made simple.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF666666),
-                    ),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF666666)),
                   ),
                   const SizedBox(height: 48),
                   const Text(
@@ -155,8 +152,11 @@ class _RoleCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios_rounded,
-                  color: Color(0xFFAAAAAA), size: 16),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Color(0xFFAAAAAA),
+                size: 16,
+              ),
             ],
           ),
         ),

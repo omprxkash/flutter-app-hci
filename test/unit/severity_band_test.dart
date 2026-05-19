@@ -21,8 +21,14 @@ void main() {
     ];
 
     for (int score = 0; score <= 27; score++) {
-      final Iterable<SeverityBand> matching = bands.where((b) => b.contains(score));
-      expect(matching.length, 1, reason: 'Score $score must match exactly one band');
+      final Iterable<SeverityBand> matching = bands.where(
+        (b) => b.contains(score),
+      );
+      expect(
+        matching.length,
+        1,
+        reason: 'Score $score must match exactly one band',
+      );
     }
   });
 }

@@ -66,12 +66,16 @@ class _ChoiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color border = selected ? AppColors.primary : Theme.of(context).dividerColor;
+    final Color border = selected
+        ? AppColors.primary
+        : Theme.of(context).dividerColor;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        constraints: const BoxConstraints(minHeight: AppConstants.minTapTargetDp),
+        constraints: const BoxConstraints(
+          minHeight: AppConstants.minTapTargetDp,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           border: Border.all(color: border, width: selected ? 2 : 1),
@@ -85,11 +89,20 @@ class _ChoiceTile extends StatelessWidget {
             Icon(
               allowMultiple
                   ? (selected ? Icons.check_box : Icons.check_box_outline_blank)
-                  : (selected ? Icons.radio_button_checked : Icons.radio_button_unchecked),
-              color: selected ? AppColors.primary : Theme.of(context).disabledColor,
+                  : (selected
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked),
+              color: selected
+                  ? AppColors.primary
+                  : Theme.of(context).disabledColor,
             ),
             const SizedBox(width: 12),
-            Expanded(child: Text(option.label, style: Theme.of(context).textTheme.bodyLarge)),
+            Expanded(
+              child: Text(
+                option.label,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
           ],
         ),
       ),

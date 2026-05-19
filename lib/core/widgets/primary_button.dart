@@ -30,15 +30,15 @@ class PrimaryButton extends StatelessWidget {
             child: CircularProgressIndicator(strokeWidth: 2.5),
           )
         : icon == null
-            ? Text(label)
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(icon, size: 20),
-                  const SizedBox(width: 8),
-                  Text(label),
-                ],
-              );
+        ? Text(label)
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(icon, size: 20),
+              const SizedBox(width: 8),
+              Text(label),
+            ],
+          );
 
     final FilledButton button = FilledButton(
       onPressed: isLoading ? null : onPressed,

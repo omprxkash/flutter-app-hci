@@ -18,7 +18,9 @@ class InMemoryResponseRepository implements ResponseRepository {
   final Uuid _uuid = const Uuid();
 
   @override
-  Future<Result<QuizResponse, Failure>> submitResponse(QuizResponse response) async {
+  Future<Result<QuizResponse, Failure>> submitResponse(
+    QuizResponse response,
+  ) async {
     final QuizResponse toSave = response.id.isEmpty
         ? QuizResponse(
             id: _uuid.v4(),
@@ -42,35 +44,54 @@ class InMemoryResponseRepository implements ResponseRepository {
   @override
   Future<Result<QuizResponse, Failure>> getResponse(String responseId) async {
     final QuizResponse? r = _responses[responseId];
-    if (r == null) return const Err<QuizResponse, Failure>(NotFoundFailure('Response not found.'));
+    if (r == null)
+      return const Err<QuizResponse, Failure>(
+        NotFoundFailure('Response not found.'),
+      );
     return Success<QuizResponse, Failure>(r);
   }
 
   @override
   Stream<List<QuizResponse>> watchResponsesForPatient(String patientId) {
-    final StreamController<List<QuizResponse>> c =
-        _patientStreams.putIfAbsent(patientId, () => StreamController<List<QuizResponse>>.broadcast());
+    final StreamController<List<QuizResponse>> c = _patientStreams.putIfAbsent(
+      patientId,
+      () => StreamController<List<QuizResponse>>.broadcast(),
+    );
     scheduleMicrotask(() => c.add(_forPatient(patientId)));
     return c.stream;
   }
 
   @override
   Stream<List<QuizResponse>> watchResponsesAwaitingReview(String doctorId) {
-    final StreamController<List<QuizResponse>> c =
-        _doctorStreams.putIfAbsent(doctorId, () => StreamController<List<QuizResponse>>.broadcast());
+    final StreamController<List<QuizResponse>> c = _doctorStreams.putIfAbsent(
+      doctorId,
+      () => StreamController<List<QuizResponse>>.broadcast(),
+    );
     scheduleMicrotask(() => c.add(_awaitingReview(doctorId)));
     return c.stream;
   }
 
-  List<QuizResponse> _forPatient(String patientId) => _responses.values
-      .where((QuizResponse r) => r.patientId == patientId)
-      .toList()
-    ..sort((QuizResponse a, QuizResponse b) => b.submittedAt.compareTo(a.submittedAt));
+  List<QuizResponse> _forPatient(String patientId) =>
+      _responses.values
+          .where((QuizResponse r) => r.patientId == patientId)
+          .toList()
+        ..sort(
+          (QuizResponse a, QuizResponse b) =>
+              b.submittedAt.compareTo(a.submittedAt),
+        );
 
-  List<QuizResponse> _awaitingReview(String doctorId) => _responses.values
-      .where((QuizResponse r) => r.doctorId == doctorId && !_reviewsByResponseId.containsKey(r.id))
-      .toList()
-    ..sort((QuizResponse a, QuizResponse b) => a.submittedAt.compareTo(b.submittedAt));
+  List<QuizResponse> _awaitingReview(String doctorId) =>
+      _responses.values
+          .where(
+            (QuizResponse r) =>
+                r.doctorId == doctorId &&
+                !_reviewsByResponseId.containsKey(r.id),
+          )
+          .toList()
+        ..sort(
+          (QuizResponse a, QuizResponse b) =>
+              a.submittedAt.compareTo(b.submittedAt),
+        );
 
   void _notify(String patientId, String doctorId) {
     _patientStreams[patientId]?.add(_forPatient(patientId));
@@ -97,15 +118,19 @@ class InMemoryResponseRepository implements ResponseRepository {
   }
 
   @override
-  Future<Result<Review?, Failure>> getReviewForResponse(String responseId) async {
+  Future<Result<Review?, Failure>> getReviewForResponse(
+    String responseId,
+  ) async {
     return Success<Review?, Failure>(_reviewsByResponseId[responseId]);
   }
 
   void dispose() {
-    for (final StreamController<List<QuizResponse>> c in _patientStreams.values) {
+    for (final StreamController<List<QuizResponse>> c
+        in _patientStreams.values) {
       c.close();
     }
-    for (final StreamController<List<QuizResponse>> c in _doctorStreams.values) {
+    for (final StreamController<List<QuizResponse>> c
+        in _doctorStreams.values) {
       c.close();
     }
   }

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
@@ -57,15 +57,17 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
 
   void _addQuestion() {
     setState(() {
-      _questions.add(_QuestionDraft(
-        id: _uuid.v4(),
-        text: '',
-        type: QuestionType.singleChoice,
-        options: <_OptionDraft>[
-          _OptionDraft(id: _uuid.v4(), label: 'Option 1', score: 0),
-          _OptionDraft(id: _uuid.v4(), label: 'Option 2', score: 1),
-        ],
-      ));
+      _questions.add(
+        _QuestionDraft(
+          id: _uuid.v4(),
+          text: '',
+          type: QuestionType.singleChoice,
+          options: <_OptionDraft>[
+            _OptionDraft(id: _uuid.v4(), label: 'Option 1', score: 0),
+            _OptionDraft(id: _uuid.v4(), label: 'Option 2', score: 1),
+          ],
+        ),
+      );
     });
   }
 
@@ -98,17 +100,23 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
       estimatedMinutes: int.tryParse(_estMinutesController.text.trim()),
     );
 
-    final Result<Quiz, Failure> r = await ref.read(quizRepositoryProvider).saveQuiz(quiz);
+    final Result<Quiz, Failure> r = await ref
+        .read(quizRepositoryProvider)
+        .saveQuiz(quiz);
 
     if (!mounted) return;
     setState(() => _isSaving = false);
 
     switch (r) {
       case Success<Quiz, Failure>():
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Quiz saved.')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Quiz saved.')));
         if (context.canPop()) context.pop();
       case Err<Quiz, Failure>(:final Failure failure):
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failure.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
     }
   }
 
@@ -119,8 +127,10 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
       final AsyncValue<Quiz> async = ref.watch(quizByIdProvider(id));
       return async.when(
         loading: () => const AppScaffold(body: LoadingIndicator()),
-        error: (Object e, _) =>
-            AppScaffold(title: 'Builder', body: Center(child: Text(e.toString()))),
+        error: (Object e, _) => AppScaffold(
+          title: 'Builder',
+          body: Center(child: Text(e.toString())),
+        ),
         data: (Quiz q) {
           _hydrate(q);
           _initialized = true;
@@ -134,7 +144,9 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
   Widget _buildForm() {
     final bool readOnly = _isPreset;
     return AppScaffold(
-      title: readOnly ? 'Quiz (preset)' : (widget.existingQuizId == null ? 'New quiz' : 'Edit quiz'),
+      title: readOnly
+          ? 'Quiz (preset)'
+          : (widget.existingQuizId == null ? 'New quiz' : 'Edit quiz'),
       maxContentWidth: 900,
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -151,7 +163,11 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
                 children: <Widget>[
                   Icon(Icons.lock_outline_rounded, size: 20),
                   SizedBox(width: 8),
-                  Expanded(child: Text('Preset quizzes are read-only. Assign them as-is.')),
+                  Expanded(
+                    child: Text(
+                      'Preset quizzes are read-only. Assign them as-is.',
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -177,8 +193,10 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
           const SizedBox(height: 24),
           Row(
             children: <Widget>[
-              Text('Questions (${_questions.length})',
-                  style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'Questions (${_questions.length})',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const Spacer(),
               if (!readOnly)
                 SecondaryButton(
@@ -202,9 +220,21 @@ class _QuizBuilderScreenState extends ConsumerState<QuizBuilderScreen> {
                 onChanged: (_QuestionDraft updated) =>
                     setState(() => _questions[idx] = updated),
                 onRemove: () => setState(() => _questions.removeAt(idx)),
-                onMoveUp: idx > 0 ? () => setState(() => _questions.insert(idx - 1, _questions.removeAt(idx))) : null,
+                onMoveUp: idx > 0
+                    ? () => setState(
+                        () => _questions.insert(
+                          idx - 1,
+                          _questions.removeAt(idx),
+                        ),
+                      )
+                    : null,
                 onMoveDown: idx < _questions.length - 1
-                    ? () => setState(() => _questions.insert(idx + 1, _questions.removeAt(idx)))
+                    ? () => setState(
+                        () => _questions.insert(
+                          idx + 1,
+                          _questions.removeAt(idx),
+                        ),
+                      )
                     : null,
                 uuid: _uuid,
               ),
@@ -242,17 +272,19 @@ class _QuestionDraft {
   });
 
   factory _QuestionDraft.fromEntity(Question q) => _QuestionDraft(
-        id: q.id,
-        text: q.text,
-        type: q.type,
-        options: q.options
-            .map((opt) => _OptionDraft(id: opt.id, label: opt.label, score: opt.score))
-            .toList(),
-        required: q.required,
-        helpText: q.helpText,
-        minValue: q.minValue,
-        maxValue: q.maxValue,
-      );
+    id: q.id,
+    text: q.text,
+    type: q.type,
+    options: q.options
+        .map(
+          (opt) => _OptionDraft(id: opt.id, label: opt.label, score: opt.score),
+        )
+        .toList(),
+    required: q.required,
+    helpText: q.helpText,
+    minValue: q.minValue,
+    maxValue: q.maxValue,
+  );
 
   String id;
   String text;
@@ -264,17 +296,20 @@ class _QuestionDraft {
   num? maxValue;
 
   Question toEntity() => Question(
-        id: id,
-        text: text,
-        type: type,
-        options: options
-            .map((opt) => QuestionOption(id: opt.id, label: opt.label, score: opt.score))
-            .toList(),
-        required: required,
-        helpText: helpText,
-        minValue: minValue,
-        maxValue: maxValue,
-      );
+    id: id,
+    text: text,
+    type: type,
+    options: options
+        .map(
+          (opt) =>
+              QuestionOption(id: opt.id, label: opt.label, score: opt.score),
+        )
+        .toList(),
+    required: required,
+    helpText: helpText,
+    minValue: minValue,
+    maxValue: maxValue,
+  );
 }
 
 class _OptionDraft {
@@ -334,11 +369,19 @@ class _QuestionEditor extends StatelessWidget {
                 CircleAvatar(
                   radius: 14,
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: Text('${index + 1}',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                  child: Text(
+                    '${index + 1}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 8),
-                Text('Question', style: Theme.of(context).textTheme.labelMedium),
+                Text(
+                  'Question',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
                 const Spacer(),
                 if (!readOnly) ...<Widget>[
                   IconButton(
@@ -375,17 +418,20 @@ class _QuestionEditor extends StatelessWidget {
               value: draft.type,
               decoration: const InputDecoration(labelText: 'Type'),
               items: QuestionType.values
-                  .map((QuestionType t) => DropdownMenuItem<QuestionType>(
-                        value: t,
-                        child: Text(_typeLabels[t] ?? t.name),
-                      ))
+                  .map(
+                    (QuestionType t) => DropdownMenuItem<QuestionType>(
+                      value: t,
+                      child: Text(_typeLabels[t] ?? t.name),
+                    ),
+                  )
                   .toList(),
               onChanged: readOnly
                   ? null
                   : (QuestionType? t) {
                       if (t == null) return;
                       draft.type = t;
-                      if (draft.type == QuestionType.yesNo && draft.options.length != 2) {
+                      if (draft.type == QuestionType.yesNo &&
+                          draft.options.length != 2) {
                         draft.options = <_OptionDraft>[
                           _OptionDraft(id: uuid.v4(), label: 'Yes', score: 1),
                           _OptionDraft(id: uuid.v4(), label: 'No', score: 0),
@@ -445,7 +491,11 @@ class _QuestionEditor extends StatelessWidget {
                 TextButton.icon(
                   onPressed: () {
                     draft.options.add(
-                      _OptionDraft(id: uuid.v4(), label: '', score: draft.options.length),
+                      _OptionDraft(
+                        id: uuid.v4(),
+                        label: '',
+                        score: draft.options.length,
+                      ),
                     );
                     onChanged(draft);
                   },
@@ -507,4 +557,3 @@ class _QuestionEditor extends StatelessWidget {
     );
   }
 }
-

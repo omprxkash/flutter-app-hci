@@ -68,7 +68,9 @@ const List<ShellTab> _doctorTabs = <ShellTab>[
   ),
 ];
 
-final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((Ref ref) {
+final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((
+  Ref ref,
+) {
   final ValueNotifier<int> refreshListener = ValueNotifier<int>(0);
   ref.listen(authStateChangesProvider, (Object? _, Object? __) {
     refreshListener.value++;
@@ -106,7 +108,8 @@ final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((Ref
         name: RouteNames.otpVerification,
         builder: (BuildContext context, GoRouterState state) {
           final Map<String, dynamic> extra =
-              (state.extra as Map<String, dynamic>?) ?? const <String, dynamic>{};
+              (state.extra as Map<String, dynamic>?) ??
+              const <String, dynamic>{};
           return OtpVerificationScreen(
             phoneNumber: extra['phone'] as String? ?? '',
             verificationId: extra['verificationId'] as String? ?? '',
@@ -124,35 +127,45 @@ final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((Ref
 
       // Patient shell (Home / History / Profile) ------------------------
       StatefulShellRoute.indexedStack(
-        builder: (BuildContext context, GoRouterState state,
-            StatefulNavigationShell navigationShell) {
-          return MainShell(
-            navigationShell: navigationShell,
-            tabs: _patientTabs,
-          );
-        },
+        builder:
+            (
+              BuildContext context,
+              GoRouterState state,
+              StatefulNavigationShell navigationShell,
+            ) {
+              return MainShell(
+                navigationShell: navigationShell,
+                tabs: _patientTabs,
+              );
+            },
         branches: <StatefulShellBranch>[
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.patientHome,
-              name: RouteNames.patientHome,
-              builder: (_, __) => const PatientHomeScreen(),
-            ),
-          ]),
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.patientHistory,
-              name: RouteNames.patientHistory,
-              builder: (_, __) => const PatientHistoryScreen(),
-            ),
-          ]),
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.patientProfile,
-              name: RouteNames.patientProfile,
-              builder: (_, __) => const PatientProfileScreen(),
-            ),
-          ]),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: RoutePaths.patientHome,
+                name: RouteNames.patientHome,
+                builder: (_, __) => const PatientHomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: RoutePaths.patientHistory,
+                name: RouteNames.patientHistory,
+                builder: (_, __) => const PatientHistoryScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: RoutePaths.patientProfile,
+                name: RouteNames.patientProfile,
+                builder: (_, __) => const PatientProfileScreen(),
+              ),
+            ],
+          ),
         ],
       ),
 
@@ -166,7 +179,8 @@ final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((Ref
         path: RoutePaths.takeQuiz,
         name: RouteNames.takeQuiz,
         builder: (BuildContext context, GoRouterState state) {
-          final String assignmentId = state.pathParameters['assignmentId'] ?? '';
+          final String assignmentId =
+              state.pathParameters['assignmentId'] ?? '';
           return TakeQuizScreen(assignmentId: assignmentId);
         },
       ),
@@ -181,35 +195,45 @@ final Provider<GoRouterConfig> appRouterProvider = Provider<GoRouterConfig>((Ref
 
       // Doctor shell (Dashboard / Library / Profile) --------------------
       StatefulShellRoute.indexedStack(
-        builder: (BuildContext context, GoRouterState state,
-            StatefulNavigationShell navigationShell) {
-          return MainShell(
-            navigationShell: navigationShell,
-            tabs: _doctorTabs,
-          );
-        },
+        builder:
+            (
+              BuildContext context,
+              GoRouterState state,
+              StatefulNavigationShell navigationShell,
+            ) {
+              return MainShell(
+                navigationShell: navigationShell,
+                tabs: _doctorTabs,
+              );
+            },
         branches: <StatefulShellBranch>[
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.doctorDashboard,
-              name: RouteNames.doctorDashboard,
-              builder: (_, __) => const DoctorDashboardScreen(),
-            ),
-          ]),
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.quizLibrary,
-              name: RouteNames.quizLibrary,
-              builder: (_, __) => const QuizLibraryScreen(),
-            ),
-          ]),
-          StatefulShellBranch(routes: <RouteBase>[
-            GoRoute(
-              path: RoutePaths.doctorProfile,
-              name: RouteNames.doctorProfile,
-              builder: (_, __) => const DoctorProfileScreen(),
-            ),
-          ]),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: RoutePaths.doctorDashboard,
+                name: RouteNames.doctorDashboard,
+                builder: (_, __) => const DoctorDashboardScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: RoutePaths.quizLibrary,
+                name: RouteNames.quizLibrary,
+                builder: (_, __) => const QuizLibraryScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: RoutePaths.doctorProfile,
+                name: RouteNames.doctorProfile,
+                builder: (_, __) => const DoctorProfileScreen(),
+              ),
+            ],
+          ),
         ],
       ),
 

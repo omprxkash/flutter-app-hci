@@ -37,7 +37,10 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
   }
 
   Future<void> _confirmAndSubmit(
-      Quiz quiz, Assignment assignment, String patientId) async {
+    Quiz quiz,
+    Assignment assignment,
+    String patientId,
+  ) async {
     final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext ctx) => AlertDialog(
@@ -61,9 +64,15 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
     if (confirmed == true) _submit(quiz, assignment, patientId);
   }
 
-  Future<void> _submit(Quiz quiz, Assignment assignment, String patientId) async {
+  Future<void> _submit(
+    Quiz quiz,
+    Assignment assignment,
+    String patientId,
+  ) async {
     setState(() => _isSubmitting = true);
-    final score = ref.read(scoreResponseProvider).call(quiz, _answers.values.toList());
+    final score = ref
+        .read(scoreResponseProvider)
+        .call(quiz, _answers.values.toList());
     final response = QuizResponse(
       id: '',
       assignmentId: assignment.id,
@@ -80,13 +89,16 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
           : DateTime.now().difference(_startedAt!).inSeconds,
     );
 
-    final Result<QuizResponse, Failure> r =
-        await ref.read(responseRepositoryProvider).submitResponse(response);
+    final Result<QuizResponse, Failure> r = await ref
+        .read(responseRepositoryProvider)
+        .submitResponse(response);
 
     if (!mounted) return;
     switch (r) {
       case Success<QuizResponse, Failure>(:final QuizResponse data):
-        await ref.read(quizRepositoryProvider).updateAssignment(
+        await ref
+            .read(quizRepositoryProvider)
+            .updateAssignment(
               assignment.copyWith(
                 status: AssignmentStatus.completed,
                 completedAt: DateTime.now(),
@@ -100,8 +112,9 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
         );
       case Err<QuizResponse, Failure>(:final Failure failure):
         setState(() => _isSubmitting = false);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(failure.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
     }
   }
 
@@ -117,7 +130,9 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
       future: _loadAssignment(patientId),
       builder: (context, snap) {
         if (snap.connectionState != ConnectionState.done) {
-          return const Scaffold(body: LoadingIndicator(label: 'Loading assignment...'));
+          return const Scaffold(
+            body: LoadingIndicator(label: 'Loading assignment...'),
+          );
         }
         final Assignment? assignment = snap.data;
         if (assignment == null) {
@@ -126,23 +141,29 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
             body: const ErrorView(message: 'Assignment not found.'),
           );
         }
-        return Consumer(builder: (context, ref, _) {
-          final quizAsync = ref.watch(quizByIdProvider(assignment.quizId));
-          return quizAsync.when(
-            loading: () => const Scaffold(body: LoadingIndicator(label: 'Loading quiz...')),
-            error: (e, _) => Scaffold(
-              appBar: AppBar(title: const Text('Quiz')),
-              body: ErrorView(message: e.toString()),
-            ),
-            data: (quiz) => _buildQuiz(quiz, assignment, patientId),
-          );
-        });
+        return Consumer(
+          builder: (context, ref, _) {
+            final quizAsync = ref.watch(quizByIdProvider(assignment.quizId));
+            return quizAsync.when(
+              loading: () => const Scaffold(
+                body: LoadingIndicator(label: 'Loading quiz...'),
+              ),
+              error: (e, _) => Scaffold(
+                appBar: AppBar(title: const Text('Quiz')),
+                body: ErrorView(message: e.toString()),
+              ),
+              data: (quiz) => _buildQuiz(quiz, assignment, patientId),
+            );
+          },
+        );
       },
     );
   }
 
   Future<Assignment?> _loadAssignment(String patientId) async {
-    final r = await ref.read(quizRepositoryProvider).getAssignment(patientId, widget.assignmentId);
+    final r = await ref
+        .read(quizRepositoryProvider)
+        .getAssignment(patientId, widget.assignmentId);
     return r.dataOrNull;
   }
 
@@ -169,8 +190,10 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
               child: Row(
                 children: <Widget>[
                   IconButton(
-                    icon: const Icon(Icons.close_rounded,
-                        color: Color(0xFF0A0A0A)),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: Color(0xFF0A0A0A),
+                    ),
                     onPressed: () => context.pop(),
                   ),
                   Expanded(
@@ -199,7 +222,9 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     decoration: BoxDecoration(
                       color: accentColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -270,18 +295,16 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
                   if (_currentIndex > 0) ...<Widget>[
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () =>
-                            setState(() => _currentIndex--),
+                        onPressed: () => setState(() => _currentIndex--),
                         icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                        label: const Text('Back',
-                            style:
-                                TextStyle(fontWeight: FontWeight.w600)),
+                        label: const Text(
+                          'Back',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFF0A0A0A),
-                          side: const BorderSide(
-                              color: Color(0xFFE2E8F0)),
-                          padding:
-                              const EdgeInsets.symmetric(vertical: 14),
+                          side: const BorderSide(color: Color(0xFFE2E8F0)),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -296,8 +319,7 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
                       onPressed: canProceed && !_isSubmitting
                           ? () {
                               if (isLast) {
-                                _confirmAndSubmit(
-                                    quiz, assignment, patientId);
+                                _confirmAndSubmit(quiz, assignment, patientId);
                               } else {
                                 setState(() => _currentIndex++);
                               }
@@ -308,13 +330,16 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
                               width: 18,
                               height: 18,
                               child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white),
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
                             )
-                          : Icon(isLast
-                              ? Icons.check_rounded
-                              : Icons.arrow_forward_rounded,
-                              size: 18),
+                          : Icon(
+                              isLast
+                                  ? Icons.check_rounded
+                                  : Icons.arrow_forward_rounded,
+                              size: 18,
+                            ),
                       label: Text(
                         isLast ? 'Submit' : 'Next',
                         style: const TextStyle(
@@ -323,10 +348,10 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
                         ),
                       ),
                       style: FilledButton.styleFrom(
-                        backgroundColor:
-                            canProceed ? accentColor : const Color(0xFFCBD5E0),
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: canProceed
+                            ? accentColor
+                            : const Color(0xFFCBD5E0),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

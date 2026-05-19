@@ -26,8 +26,9 @@ class DoctorProfileScreen extends ConsumerWidget {
           if (user == null) {
             return const Center(child: Text('Not signed in.'));
           }
-          final AsyncValue<List<AppUser>> patients =
-              ref.watch(patientsForDoctorProvider(user.id));
+          final AsyncValue<List<AppUser>> patients = ref.watch(
+            patientsForDoctorProvider(user.id),
+          );
           final int patientCount = patients.value?.length ?? 0;
 
           return ListView(
@@ -41,13 +42,17 @@ class DoctorProfileScreen extends ConsumerWidget {
                       ? user.displayName[0].toUpperCase()
                       : '?',
                   style: const TextStyle(
-                      fontSize: 32, fontWeight: FontWeight.w700),
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               Center(
-                child: Text('Dr. ${user.displayName}',
-                    style: Theme.of(context).textTheme.headlineSmall),
+                child: Text(
+                  'Dr. ${user.displayName}',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
               ),
               if (user.specialty != null)
                 Center(
@@ -56,38 +61,42 @@ class DoctorProfileScreen extends ConsumerWidget {
                     child: Text(
                       user.specialty!,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.6),
-                          ),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
                 ),
               const SizedBox(height: 24),
               _InfoTile(
-                  icon: Icons.email_outlined,
-                  label: 'Email',
-                  value: user.email ?? '—'),
+                icon: Icons.email_outlined,
+                label: 'Email',
+                value: user.email ?? '—',
+              ),
               _InfoTile(
-                  icon: Icons.badge_outlined,
-                  label: 'License',
-                  value: user.licenseNumber ?? '—'),
+                icon: Icons.badge_outlined,
+                label: 'License',
+                value: user.licenseNumber ?? '—',
+              ),
               _InfoTile(
-                  icon: Icons.people_outline_rounded,
-                  label: 'Patients',
-                  value: patientCount.toString()),
+                icon: Icons.people_outline_rounded,
+                label: 'Patients',
+                value: patientCount.toString(),
+              ),
               _InfoTile(
-                  icon: Icons.language,
-                  label: 'Preferred language',
-                  value: user.preferredLocale),
+                icon: Icons.language,
+                label: 'Preferred language',
+                value: user.preferredLocale,
+              ),
               const SizedBox(height: 32),
               SecondaryButton(
                 label: 'Sign out',
                 icon: Icons.logout_rounded,
                 onPressed: () async {
                   await ref.read(authControllerProvider.notifier).signOut();
-                  if (context.mounted) context.goNamed(RouteNames.roleSelection);
+                  if (context.mounted)
+                    context.goNamed(RouteNames.roleSelection);
                 },
               ),
             ],
@@ -99,8 +108,11 @@ class DoctorProfileScreen extends ConsumerWidget {
 }
 
 class _InfoTile extends StatelessWidget {
-  const _InfoTile(
-      {required this.icon, required this.label, required this.value});
+  const _InfoTile({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   final IconData icon;
   final String label;

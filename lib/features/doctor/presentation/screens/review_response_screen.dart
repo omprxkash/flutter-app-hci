@@ -28,7 +28,8 @@ class ReviewResponseScreen extends ConsumerStatefulWidget {
   final String responseId;
 
   @override
-  ConsumerState<ReviewResponseScreen> createState() => _ReviewResponseScreenState();
+  ConsumerState<ReviewResponseScreen> createState() =>
+      _ReviewResponseScreenState();
 }
 
 class _ReviewResponseScreenState extends ConsumerState<ReviewResponseScreen> {
@@ -53,7 +54,10 @@ class _ReviewResponseScreenState extends ConsumerState<ReviewResponseScreen> {
     super.dispose();
   }
 
-  Future<void> _save({required QuizResponse response, required Quiz quiz}) async {
+  Future<void> _save({
+    required QuizResponse response,
+    required Quiz quiz,
+  }) async {
     setState(() => _isSaving = true);
 
     final int? finalScore = int.tryParse(_scoreController.text.trim());
@@ -66,43 +70,53 @@ class _ReviewResponseScreenState extends ConsumerState<ReviewResponseScreen> {
       doctorId: doctorId,
       finalScore: finalScore ?? response.autoScore,
       reviewedAt: DateTime.now(),
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      notes: _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
       recommendedFollowUpInDays: _followUpDays,
     );
 
-    final Result<Review, Failure> r =
-        await ref.read(responseRepositoryProvider).saveReview(review);
+    final Result<Review, Failure> r = await ref
+        .read(responseRepositoryProvider)
+        .saveReview(review);
 
     if (!mounted) return;
     setState(() => _isSaving = false);
 
     switch (r) {
       case Success<Review, Failure>():
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Review saved.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Review saved.')));
         if (context.canPop()) context.pop();
       case Err<Review, Failure>(:final Failure failure):
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<QuizResponse> responseAsync =
-        ref.watch(responseByIdProvider(widget.responseId));
+    final AsyncValue<QuizResponse> responseAsync = ref.watch(
+      responseByIdProvider(widget.responseId),
+    );
     return responseAsync.when(
       loading: () => const AppScaffold(body: LoadingIndicator()),
-      error: (Object e, _) =>
-          AppScaffold(title: 'Review', body: ErrorView(message: e.toString())),
+      error: (Object e, _) => AppScaffold(
+        title: 'Review',
+        body: ErrorView(message: e.toString()),
+      ),
       data: (QuizResponse response) {
-        final AsyncValue<Quiz> quizAsync = ref.watch(quizByIdProvider(response.quizId));
+        final AsyncValue<Quiz> quizAsync = ref.watch(
+          quizByIdProvider(response.quizId),
+        );
         return quizAsync.when(
           loading: () => const AppScaffold(body: LoadingIndicator()),
-          error: (Object e, _) =>
-              AppScaffold(title: 'Review', body: ErrorView(message: e.toString())),
+          error: (Object e, _) => AppScaffold(
+            title: 'Review',
+            body: ErrorView(message: e.toString()),
+          ),
           data: (Quiz quiz) {
             if (!_initialized) {
               _scoreController.text = response.autoScore.toString();
@@ -122,7 +136,10 @@ class _ReviewResponseScreenState extends ConsumerState<ReviewResponseScreen> {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           final bool isWide = constraints.maxWidth > 720;
-          final Widget answersPanel = _AnswersPanel(response: response, quiz: quiz);
+          final Widget answersPanel = _AnswersPanel(
+            response: response,
+            quiz: quiz,
+          );
           final Widget reviewForm = _ReviewForm(
             response: response,
             quiz: quiz,
@@ -265,22 +282,28 @@ class _ReviewForm extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  const Icon(Icons.edit_note_rounded, color: AppColors.primary, size: 20),
+                  const Icon(
+                    Icons.edit_note_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'Your Assessment',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
 
               // Score override
-              Text('Final score (override)',
-                  style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                'Final score (override)',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               const SizedBox(height: 6),
               TextField(
                 controller: scoreController,
@@ -294,8 +317,10 @@ class _ReviewForm extends StatelessWidget {
               const SizedBox(height: 18),
 
               // Follow-up chips
-              Text('Recommend follow-up',
-                  style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                'Recommend follow-up',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -306,7 +331,10 @@ class _ReviewForm extends StatelessWidget {
                     onTap: () => onFollowUpChanged(opt.days),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 130),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: selected
                             ? AppColors.primary
@@ -322,11 +350,11 @@ class _ReviewForm extends StatelessWidget {
                       child: Text(
                         opt.label,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: selected
-                                  ? Colors.white
-                                  : Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: selected
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   );
@@ -335,7 +363,10 @@ class _ReviewForm extends StatelessWidget {
               const SizedBox(height: 18),
 
               // Clinical notes
-              Text('Clinical notes', style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                'Clinical notes',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               const SizedBox(height: 6),
               TextField(
                 controller: notesController,
@@ -343,7 +374,8 @@ class _ReviewForm extends StatelessWidget {
                 maxLength: AppConstants.maxReviewNoteLength,
                 decoration: const InputDecoration(
                   alignLabelWithHint: true,
-                  hintText: 'Visible to you and the patient on their result screen.',
+                  hintText:
+                      'Visible to you and the patient on their result screen.',
                 ),
               ),
               const SizedBox(height: 16),
@@ -378,10 +410,14 @@ class _AnswerSummary extends StatelessWidget {
         return a.textValue ?? '—';
       default:
         final List<String> labels = a.selectedOptionIds
-            .map((String id) => question.options
-                .where((opt) => opt.id == id)
-                .map((opt) => opt.label)
-                .firstOrNull ?? id)
+            .map(
+              (String id) =>
+                  question.options
+                      .where((opt) => opt.id == id)
+                      .map((opt) => opt.label)
+                      .firstOrNull ??
+                  id,
+            )
             .toList();
         return labels.join(', ');
     }
@@ -402,18 +438,25 @@ class _AnswerSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(question.text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-          )),
+          Text(
+            question.text,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
           const SizedBox(height: 6),
           Text(
             _renderAnswer(),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: answered
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
-                  fontWeight: answered ? FontWeight.w600 : FontWeight.w400,
-                ),
+              color: answered
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.4),
+              fontWeight: answered ? FontWeight.w600 : FontWeight.w400,
+            ),
           ),
         ],
       ),

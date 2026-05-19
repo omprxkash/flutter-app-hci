@@ -13,7 +13,10 @@ class ErrorView extends StatelessWidget {
     this.onRetry,
     this.icon = Icons.error_outline_rounded,
     super.key,
-  }) : assert(failure != null || message != null, 'Provide a failure or a message');
+  }) : assert(
+         failure != null || message != null,
+         'Provide a failure or a message',
+       );
 
   final Failure? failure;
   final String? message;

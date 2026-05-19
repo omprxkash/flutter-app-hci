@@ -21,7 +21,8 @@ sealed class Failure extends Equatable {
 
 /// Network or backend-unreachable failures.
 class NetworkFailure extends Failure {
-  const NetworkFailure([String message = 'Network unavailable.']) : super(message);
+  const NetworkFailure([String message = 'Network unavailable.'])
+    : super(message);
 }
 
 /// Authentication-related failures (bad OTP, expired session, unknown user).
@@ -48,7 +49,11 @@ class NotFoundFailure extends Failure {
 /// The input failed validation. `fieldErrors` carries per-field messages so
 /// the UI can highlight individual form fields.
 class ValidationFailure extends Failure {
-  const ValidationFailure(super.message, {this.fieldErrors = const <String, String>{}, super.cause});
+  const ValidationFailure(
+    super.message, {
+    this.fieldErrors = const <String, String>{},
+    super.cause,
+  });
 
   final Map<String, String> fieldErrors;
 
@@ -58,5 +63,6 @@ class ValidationFailure extends Failure {
 
 /// Catch-all for unexpected failures. Should be rare in well-typed code.
 class UnknownFailure extends Failure {
-  const UnknownFailure(String message, {Object? cause}) : super(message, cause: cause);
+  const UnknownFailure(String message, {Object? cause})
+    : super(message, cause: cause);
 }

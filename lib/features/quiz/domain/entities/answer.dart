@@ -38,5 +38,10 @@ class Answer extends Equatable {
   }
 
   @override
-  List<Object?> get props => <Object?>[questionId, selectedOptionIds, numericValue, textValue];
+  List<Object?> get props => <Object?>[
+    questionId,
+    selectedOptionIds,
+    numericValue,
+    textValue,
+  ];
 }

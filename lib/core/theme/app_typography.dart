@@ -13,14 +13,14 @@ class AppTypography {
   static final String fontFamily = GoogleFonts.poppins().fontFamily!;
 
   static TextTheme lightTextTheme() => _buildTextTheme(
-        primary: AppColors.lightTextPrimary,
-        secondary: AppColors.lightTextSecondary,
-      );
+    primary: AppColors.lightTextPrimary,
+    secondary: AppColors.lightTextSecondary,
+  );
 
   static TextTheme darkTextTheme() => _buildTextTheme(
-        primary: AppColors.darkTextPrimary,
-        secondary: AppColors.darkTextSecondary,
-      );
+    primary: AppColors.darkTextPrimary,
+    secondary: AppColors.darkTextSecondary,
+  );
 
   static TextTheme _buildTextTheme({
     required Color primary,

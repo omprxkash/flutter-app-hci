@@ -26,8 +26,8 @@ class FirebaseAuthRepository implements AuthRepository {
   FirebaseAuthRepository({
     required fb.FirebaseAuth firebaseAuth,
     required FirebaseFirestore firestore,
-  })  : _firebaseAuth = firebaseAuth,
-        _firestore = firestore;
+  }) : _firebaseAuth = firebaseAuth,
+       _firestore = firestore;
 
   final fb.FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
@@ -48,15 +48,17 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   Future<AppUser?> _loadUserDoc(String uid) async {
-    final DocumentSnapshot<Map<String, dynamic>> snap =
-        await _firestore.doc(FirestorePaths.user(uid)).get();
+    final DocumentSnapshot<Map<String, dynamic>> snap = await _firestore
+        .doc(FirestorePaths.user(uid))
+        .get();
     if (!snap.exists) return null;
     return UserDto.fromSnapshot(snap);
   }
 
   @override
   Future<Result<String, Failure>> sendPhoneOtp(String phone) async {
-    final Completer<Result<String, Failure>> completer = Completer<Result<String, Failure>>();
+    final Completer<Result<String, Failure>> completer =
+        Completer<Result<String, Failure>>();
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
@@ -64,7 +66,9 @@ class FirebaseAuthRepository implements AuthRepository {
         verificationCompleted: (fb.PhoneAuthCredential _) {
           // Auto-retrieval path. UI will react via currentUserChanges.
           if (!completer.isCompleted) {
-            completer.complete(const Success<String, Failure>('auto-retrieved'));
+            completer.complete(
+              const Success<String, Failure>('auto-retrieved'),
+            );
           }
         },
         verificationFailed: (fb.FirebaseAuthException e) {
@@ -97,10 +101,14 @@ class FirebaseAuthRepository implements AuthRepository {
         verificationId: verificationId,
         smsCode: smsCode,
       );
-      final fb.UserCredential cred = await _firebaseAuth.signInWithCredential(credential);
+      final fb.UserCredential cred = await _firebaseAuth.signInWithCredential(
+        credential,
+      );
       final fb.User? user = cred.user;
       if (user == null) {
-        return const Err<AppUser, Failure>(AuthFailure('Sign-in succeeded but no user returned.'));
+        return const Err<AppUser, Failure>(
+          AuthFailure('Sign-in succeeded but no user returned.'),
+        );
       }
 
       AppUser? existing = await _loadUserDoc(user.uid);
@@ -123,7 +131,9 @@ class FirebaseAuthRepository implements AuthRepository {
           preferredLocale: registration.preferredLocale,
           createdAt: DateTime.now(),
         );
-        await _firestore.doc(FirestorePaths.user(user.uid)).set(UserDto.toMap(fresh));
+        await _firestore
+            .doc(FirestorePaths.user(user.uid))
+            .set(UserDto.toMap(fresh));
         existing = fresh;
       }
       return Success<AppUser, Failure>(existing);
@@ -141,16 +151,20 @@ class FirebaseAuthRepository implements AuthRepository {
     required String password,
   }) async {
     try {
-      final fb.UserCredential cred =
-          await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      final fb.UserCredential cred = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
       final fb.User? user = cred.user;
       if (user == null) {
-        return const Err<AppUser, Failure>(AuthFailure('Sign-in succeeded but no user returned.'));
+        return const Err<AppUser, Failure>(
+          AuthFailure('Sign-in succeeded but no user returned.'),
+        );
       }
       final AppUser? doc = await _loadUserDoc(user.uid);
       if (doc == null) {
         await _firebaseAuth.signOut();
-        return const Err<AppUser, Failure>(NotFoundFailure('Doctor profile not found.'));
+        return const Err<AppUser, Failure>(
+          NotFoundFailure('Doctor profile not found.'),
+        );
       }
       if (!doc.isDoctor) {
         await _firebaseAuth.signOut();
@@ -176,13 +190,13 @@ class FirebaseAuthRepository implements AuthRepository {
     required String licenseNumber,
   }) async {
     try {
-      final fb.UserCredential cred = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final fb.UserCredential cred = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
       final fb.User? user = cred.user;
       if (user == null) {
-        return const Err<AppUser, Failure>(AuthFailure('Register succeeded but no user returned.'));
+        return const Err<AppUser, Failure>(
+          AuthFailure('Register succeeded but no user returned.'),
+        );
       }
       final AppUser doctor = AppUser(
         id: user.uid,
@@ -193,7 +207,9 @@ class FirebaseAuthRepository implements AuthRepository {
         licenseNumber: licenseNumber,
         createdAt: DateTime.now(),
       );
-      await _firestore.doc(FirestorePaths.user(user.uid)).set(UserDto.toMap(doctor));
+      await _firestore
+          .doc(FirestorePaths.user(user.uid))
+          .set(UserDto.toMap(doctor));
       return Success<AppUser, Failure>(doctor);
     } on fb.FirebaseAuthException catch (e) {
       return Err<AppUser, Failure>(_mapAuthError(e));
@@ -206,7 +222,9 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<Result<AppUser, Failure>> signInAsPatient(String userId) async {
     return const Err<AppUser, Failure>(
-      AuthFailure('Direct patient sign-in is not available in production mode.'),
+      AuthFailure(
+        'Direct patient sign-in is not available in production mode.',
+      ),
     );
   }
 
@@ -223,7 +241,9 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<Result<AppUser, Failure>> updateProfile(AppUser user) async {
     try {
-      await _firestore.doc(FirestorePaths.user(user.id)).update(UserDto.toMap(user));
+      await _firestore
+          .doc(FirestorePaths.user(user.id))
+          .update(UserDto.toMap(user));
       return Success<AppUser, Failure>(user);
     } catch (e) {
       return Err<AppUser, Failure>(UnknownFailure(e.toString(), cause: e));

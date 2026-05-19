@@ -12,24 +12,26 @@ import '../../domain/repositories/auth_repository.dart';
 
 /// Selects the right `AuthRepository` implementation based on whether
 /// Firebase initialized successfully at app start.
-final Provider<AuthRepository> authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
-  final bool firebaseAvailable = ref.watch(firebaseAvailableProvider);
-  if (firebaseAvailable) {
-    return FirebaseAuthRepository(
-      firebaseAuth: fb.FirebaseAuth.instance,
-      firestore: FirebaseFirestore.instance,
-    );
-  }
-  final InMemoryAuthRepository repo = InMemoryAuthRepository();
-  ref.onDispose(repo.dispose);
-  return repo;
-});
+final Provider<AuthRepository> authRepositoryProvider =
+    Provider<AuthRepository>((Ref ref) {
+      final bool firebaseAvailable = ref.watch(firebaseAvailableProvider);
+      if (firebaseAvailable) {
+        return FirebaseAuthRepository(
+          firebaseAuth: fb.FirebaseAuth.instance,
+          firestore: FirebaseFirestore.instance,
+        );
+      }
+      final InMemoryAuthRepository repo = InMemoryAuthRepository();
+      ref.onDispose(repo.dispose);
+      return repo;
+    });
 
 /// Streams the currently signed-in user (null if signed out).
-final StreamProvider<AppUser?> authStateChangesProvider = StreamProvider<AppUser?>((Ref ref) {
-  final AuthRepository repo = ref.watch(authRepositoryProvider);
-  return repo.currentUserChanges();
-});
+final StreamProvider<AppUser?> authStateChangesProvider =
+    StreamProvider<AppUser?>((Ref ref) {
+      final AuthRepository repo = ref.watch(authRepositoryProvider);
+      return repo.currentUserChanges();
+    });
 
 /// Imperative auth actions. Screens read `authControllerProvider.notifier`
 /// to invoke flows and watch `authControllerProvider` for loading/error.
@@ -69,8 +71,10 @@ class AuthController extends Notifier<AsyncValue<void>> {
     required String password,
   }) async {
     state = const AsyncValue<void>.loading();
-    final Result<AppUser, Failure> r =
-        await _repo.signInDoctorWithEmail(email: email, password: password);
+    final Result<AppUser, Failure> r = await _repo.signInDoctorWithEmail(
+      email: email,
+      password: password,
+    );
     state = const AsyncValue<void>.data(null);
     return r;
   }
@@ -111,5 +115,7 @@ class AuthController extends Notifier<AsyncValue<void>> {
   }
 }
 
-final NotifierProvider<AuthController, AsyncValue<void>> authControllerProvider =
-    NotifierProvider<AuthController, AsyncValue<void>>(AuthController.new);
+final NotifierProvider<AuthController, AsyncValue<void>>
+authControllerProvider = NotifierProvider<AuthController, AsyncValue<void>>(
+  AuthController.new,
+);

@@ -50,7 +50,9 @@ class _LikertButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color borderColor = selected ? AppColors.primary : Theme.of(context).dividerColor;
+    final Color borderColor = selected
+        ? AppColors.primary
+        : Theme.of(context).dividerColor;
     final Color fillColor = selected
         ? AppColors.primary.withValues(alpha: 0.13)
         : Theme.of(context).colorScheme.surface;
@@ -67,7 +69,9 @@ class _LikertButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          constraints: const BoxConstraints(minHeight: AppConstants.minTapTargetDp + 8),
+          constraints: const BoxConstraints(
+            minHeight: AppConstants.minTapTargetDp + 8,
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             color: fillColor,
@@ -79,9 +83,13 @@ class _LikertButton extends StatelessWidget {
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 150),
                 child: Icon(
-                  selected ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
+                  selected
+                      ? Icons.check_circle_rounded
+                      : Icons.radio_button_unchecked,
                   key: ValueKey<bool>(selected),
-                  color: selected ? AppColors.primary : Theme.of(context).disabledColor,
+                  color: selected
+                      ? AppColors.primary
+                      : Theme.of(context).disabledColor,
                   size: 26,
                 ),
               ),
@@ -90,9 +98,9 @@ class _LikertButton extends StatelessWidget {
                 child: Text(
                   option.label,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: textColor,
-                        fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                      ),
+                    color: textColor,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  ),
                 ),
               ),
             ],

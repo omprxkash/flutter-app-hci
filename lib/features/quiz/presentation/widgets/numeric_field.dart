@@ -47,8 +47,9 @@ class _NumericAnswerFieldState extends State<NumericAnswerField> {
 
   String? _validate(String? raw) {
     if (raw == null || raw.trim().isEmpty) return null;
-    final num? parsed =
-        widget.allowDecimal ? num.tryParse(raw.trim()) : int.tryParse(raw.trim());
+    final num? parsed = widget.allowDecimal
+        ? num.tryParse(raw.trim())
+        : int.tryParse(raw.trim());
     if (parsed == null) return 'Enter a number.';
     if (widget.minValue != null && parsed < widget.minValue!) {
       return 'Must be ≥ ${widget.minValue}.';
@@ -63,7 +64,9 @@ class _NumericAnswerFieldState extends State<NumericAnswerField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
-      keyboardType: TextInputType.numberWithOptions(decimal: widget.allowDecimal),
+      keyboardType: TextInputType.numberWithOptions(
+        decimal: widget.allowDecimal,
+      ),
       inputFormatters: <TextInputFormatter>[
         if (!widget.allowDecimal) FilteringTextInputFormatter.digitsOnly,
       ],
@@ -80,7 +83,9 @@ class _NumericAnswerFieldState extends State<NumericAnswerField> {
           widget.onChanged(null);
           return;
         }
-        final num? parsed = widget.allowDecimal ? num.tryParse(v.trim()) : int.tryParse(v.trim());
+        final num? parsed = widget.allowDecimal
+            ? num.tryParse(v.trim())
+            : int.tryParse(v.trim());
         widget.onChanged(parsed);
       },
     );

@@ -13,7 +13,10 @@ class PatientLoginScreen extends ConsumerWidget {
   const PatientLoginScreen({super.key});
 
   Future<void> _signIn(
-      BuildContext context, WidgetRef ref, AppUser patient) async {
+    BuildContext context,
+    WidgetRef ref,
+    AppUser patient,
+  ) async {
     final result = await ref
         .read(authControllerProvider.notifier)
         .signInAsPatient(patient.id);
@@ -22,9 +25,9 @@ class PatientLoginScreen extends ConsumerWidget {
       case Success():
         context.goNamed(RouteNames.patientHome);
       case Err(:final failure):
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(failure.message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
     }
   }
 
@@ -47,8 +50,10 @@ class PatientLoginScreen extends ConsumerWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                          color: Color(0xFF0A0A0A)),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: Color(0xFF0A0A0A),
+                      ),
                       onPressed: () => context.pop(),
                     ),
                   ),
@@ -79,10 +84,7 @@ class PatientLoginScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   const Text(
                     'Tap your name to sign in instantly.',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Color(0xFF666666),
-                    ),
+                    style: TextStyle(fontSize: 15, color: Color(0xFF666666)),
                   ),
                   const SizedBox(height: 32),
                   Expanded(
@@ -99,7 +101,7 @@ class PatientLoginScreen extends ConsumerWidget {
                             .join();
                         final String gender = patient.gender != null
                             ? patient.gender![0].toUpperCase() +
-                                patient.gender!.substring(1)
+                                  patient.gender!.substring(1)
                             : '';
 
                         return Material(
@@ -112,11 +114,14 @@ class PatientLoginScreen extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(16),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 16),
+                                horizontal: 20,
+                                vertical: 16,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                    color: const Color(0xFFE2E8F0)),
+                                  color: const Color(0xFFE2E8F0),
+                                ),
                               ),
                               child: Row(
                                 children: <Widget>[

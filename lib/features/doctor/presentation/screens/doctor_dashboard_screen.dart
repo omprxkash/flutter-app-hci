@@ -68,18 +68,17 @@ class DoctorDashboardScreen extends ConsumerWidget {
                       Text(
                         'Dr. $doctorName',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         specialty,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.65),
-                            ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.65),
+                        ),
                       ),
                     ],
                   ),
@@ -99,10 +98,16 @@ class DoctorDashboardScreen extends ConsumerWidget {
           // Pending reviews section
           Row(
             children: <Widget>[
-              const Icon(Icons.rate_review_outlined, color: AppColors.warning, size: 20),
+              const Icon(
+                Icons.rate_review_outlined,
+                color: AppColors.warning,
+                size: 20,
+              ),
               const SizedBox(width: 8),
-              Text('Awaiting your review',
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Awaiting your review',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -112,9 +117,16 @@ class DoctorDashboardScreen extends ConsumerWidget {
           // Patient list section
           Row(
             children: <Widget>[
-              const Icon(Icons.people_outline_rounded, color: AppColors.secondary, size: 20),
+              const Icon(
+                Icons.people_outline_rounded,
+                color: AppColors.secondary,
+                size: 20,
+              ),
               const SizedBox(width: 8),
-              Text('Your patients', style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Your patients',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -134,8 +146,9 @@ class _Q9AlertBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<QuizResponse>> pendingAsync =
-        ref.watch(doctorPendingReviewsProvider(doctorId));
+    final AsyncValue<List<QuizResponse>> pendingAsync = ref.watch(
+      doctorPendingReviewsProvider(doctorId),
+    );
 
     return pendingAsync.maybeWhen(
       data: (List<QuizResponse> responses) {
@@ -151,15 +164,24 @@ class _Q9AlertBanner extends ConsumerWidget {
               borderRadius: BorderRadius.circular(12),
               onTap: () {}, // scrolls to pending section — future enhancement
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.danger.withOpacity(0.35), width: 1.5),
+                  border: Border.all(
+                    color: AppColors.danger.withOpacity(0.35),
+                    width: 1.5,
+                  ),
                 ),
                 child: Row(
                   children: <Widget>[
-                    const Icon(Icons.warning_amber_rounded,
-                        color: AppColors.danger, size: 22),
+                    const Icon(
+                      Icons.warning_amber_rounded,
+                      color: AppColors.danger,
+                      size: 22,
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -175,8 +197,11 @@ class _Q9AlertBanner extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const Icon(Icons.chevron_right_rounded,
-                        color: AppColors.danger, size: 20),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.danger,
+                      size: 20,
+                    ),
                   ],
                 ),
               ),
@@ -205,25 +230,34 @@ class _StatsRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Assignment>> assignments =
-        ref.watch(doctorAssignmentsProvider(doctorId));
-    final AsyncValue<List<QuizResponse>> pending =
-        ref.watch(doctorPendingReviewsProvider(doctorId));
-    final AsyncValue<List<AppUser>> patients =
-        ref.watch(patientsForDoctorProvider(doctorId));
+    final AsyncValue<List<Assignment>> assignments = ref.watch(
+      doctorAssignmentsProvider(doctorId),
+    );
+    final AsyncValue<List<QuizResponse>> pending = ref.watch(
+      doctorPendingReviewsProvider(doctorId),
+    );
+    final AsyncValue<List<AppUser>> patients = ref.watch(
+      patientsForDoctorProvider(doctorId),
+    );
 
     final int activeCount = assignments.maybeWhen(
       data: (List<Assignment> a) => a
-          .where((Assignment x) =>
-              x.status == AssignmentStatus.pending ||
-              x.status == AssignmentStatus.inProgress)
+          .where(
+            (Assignment x) =>
+                x.status == AssignmentStatus.pending ||
+                x.status == AssignmentStatus.inProgress,
+          )
           .length,
       orElse: () => 0,
     );
-    final int pendingReviews =
-        pending.maybeWhen(data: (List<QuizResponse> p) => p.length, orElse: () => 0);
-    final int patientCount =
-        patients.maybeWhen(data: (List<AppUser> p) => p.length, orElse: () => 0);
+    final int pendingReviews = pending.maybeWhen(
+      data: (List<QuizResponse> p) => p.length,
+      orElse: () => 0,
+    );
+    final int patientCount = patients.maybeWhen(
+      data: (List<AppUser> p) => p.length,
+      orElse: () => 0,
+    );
 
     return Row(
       children: <Widget>[
@@ -265,8 +299,9 @@ class _PendingReviews extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<QuizResponse>> async =
-        ref.watch(doctorPendingReviewsProvider(doctorId));
+    final AsyncValue<List<QuizResponse>> async = ref.watch(
+      doctorPendingReviewsProvider(doctorId),
+    );
     return async.when(
       loading: () => const LoadingIndicator(),
       error: (Object e, _) => Text(e.toString()),
@@ -277,10 +312,15 @@ class _PendingReviews extends ConsumerWidget {
               padding: const EdgeInsets.all(20),
               child: Row(
                 children: <Widget>[
-                  const Icon(Icons.check_circle_outline_rounded, color: AppColors.success),
+                  const Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: AppColors.success,
+                  ),
                   const SizedBox(width: 12),
-                  Text('No pending reviews — all caught up!',
-                      style: Theme.of(context).textTheme.bodyLarge),
+                  Text(
+                    'No pending reviews — all caught up!',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                 ],
               ),
             ),
@@ -318,15 +358,18 @@ class _PendingReviewCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<AppUser?> patientAsync =
-        ref.watch(patientByIdProvider(response.patientId));
-    final String patientName =
-        patientAsync.value?.displayName ?? 'Patient';
+    final AsyncValue<AppUser?> patientAsync = ref.watch(
+      patientByIdProvider(response.patientId),
+    );
+    final String patientName = patientAsync.value?.displayName ?? 'Patient';
     final String firstName = patientName.split(' ').first;
 
     // Whether this response has a Q9 flag
-    final bool q9Flag = response.quizId == 'preset_phq9' &&
-        (response.answerFor('phq9_q9')?.selectedOptionIds
+    final bool q9Flag =
+        response.quizId == 'preset_phq9' &&
+        (response
+                .answerFor('phq9_q9')
+                ?.selectedOptionIds
                 .any((id) => id != '0') ??
             false);
 
@@ -364,55 +407,60 @@ class _PendingReviewCard extends ConsumerWidget {
                     radius: 14,
                     backgroundColor: AppColors.primary.withValues(alpha: 0.15),
                     child: Text(
-                      patientName.isNotEmpty ? patientName[0].toUpperCase() : 'P',
+                      patientName.isNotEmpty
+                          ? patientName[0].toUpperCase()
+                          : 'P',
                       style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       firstName,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(fontWeight: FontWeight.w600),
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (q9Flag)
                     const Tooltip(
                       message: 'Q9: suicidal ideation flagged',
-                      child: Icon(Icons.warning_amber_rounded,
-                          size: 16, color: AppColors.danger),
+                      child: Icon(
+                        Icons.warning_amber_rounded,
+                        size: 16,
+                        color: AppColors.danger,
+                      ),
                     ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 'Score: ${response.autoScore}${response.maxPossibleScore != null ? "/${response.maxPossibleScore}" : ""}',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
               if (response.severityLabel != null)
                 Text(
                   response.severityLabel!,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.6),
-                      ),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
                 ),
               Text(
                 _timeAgo(response.submittedAt),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color:
-                          Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
               ),
               const Spacer(),
               SizedBox(
@@ -423,13 +471,17 @@ class _PendingReviewCard extends ConsumerWidget {
                     pathParameters: <String, String>{'responseId': response.id},
                   ),
                   style: FilledButton.styleFrom(
-                    backgroundColor: q9Flag ? AppColors.danger : AppColors.primary,
+                    backgroundColor: q9Flag
+                        ? AppColors.danger
+                        : AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    textStyle:
-                        const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    textStyle: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   child: const Text('Review'),
                 ),
@@ -449,16 +501,19 @@ class _PatientList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<AppUser>> patientsAsync =
-        ref.watch(patientsForDoctorProvider(doctorId));
-    final AsyncValue<List<Assignment>> assignmentsAsync =
-        ref.watch(doctorAssignmentsProvider(doctorId));
+    final AsyncValue<List<AppUser>> patientsAsync = ref.watch(
+      patientsForDoctorProvider(doctorId),
+    );
+    final AsyncValue<List<Assignment>> assignmentsAsync = ref.watch(
+      doctorAssignmentsProvider(doctorId),
+    );
 
     return patientsAsync.when(
       loading: () => const LoadingIndicator(),
       error: (Object e, _) => Text(e.toString()),
       data: (List<AppUser> patients) {
-        final List<Assignment> assignments = assignmentsAsync.value ?? <Assignment>[];
+        final List<Assignment> assignments =
+            assignmentsAsync.value ?? <Assignment>[];
 
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -527,9 +582,11 @@ class _PatientRow extends StatelessWidget {
   Widget build(BuildContext context) {
     // Most recent assignment
     final Assignment? latest = assignments.isNotEmpty
-        ? (assignments..sort((Assignment a, Assignment b) =>
-              b.assignedAt.compareTo(a.assignedAt)))
-            .first
+        ? (assignments..sort(
+                (Assignment a, Assignment b) =>
+                    b.assignedAt.compareTo(a.assignedAt),
+              ))
+              .first
         : null;
 
     final bool pendingReview = latest?.status == AssignmentStatus.completed;
@@ -537,15 +594,15 @@ class _PatientRow extends StatelessWidget {
     final Color chipColor = pendingReview
         ? AppColors.warning
         : reviewed
-            ? AppColors.success
-            : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4);
+        ? AppColors.success
+        : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4);
     final String chipLabel = pendingReview
         ? 'Needs review'
         : reviewed
-            ? 'Reviewed'
-            : latest == null
-                ? 'No assessment'
-                : 'Pending';
+        ? 'Reviewed'
+        : latest == null
+        ? 'No assessment'
+        : 'Pending';
 
     return Card(
       elevation: 0,
@@ -571,7 +628,9 @@ class _PatientRow extends StatelessWidget {
                       ? patient.displayName[0].toUpperCase()
                       : 'P',
                   style: const TextStyle(
-                      color: AppColors.secondary, fontWeight: FontWeight.w700),
+                    color: AppColors.secondary,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -580,19 +639,20 @@ class _PatientRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(patient.displayName,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            )),
+                    Text(
+                      patient.displayName,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     if (latest != null)
                       Text(
                         'Last: ${latest.quizTitle} · ${DateFormat('MMM d').format(latest.assignedAt)}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.55),
-                            ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.55),
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                   ],
@@ -608,16 +668,19 @@ class _PatientRow extends StatelessWidget {
                 child: Text(
                   chipLabel,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: chipColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: chipColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               const SizedBox(width: 4),
-              Icon(Icons.chevron_right_rounded,
-                  size: 20,
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.35)),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 20,
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.35),
+              ),
             ],
           ),
         ),

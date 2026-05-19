@@ -29,12 +29,20 @@ Future<void> main() async {
 
 Future<bool> _initFirebase() async {
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     return true;
   } catch (e, st) {
-    appLogger.w('Firebase init failed — running in offline mode', error: e, stackTrace: st);
+    appLogger.w(
+      'Firebase init failed — running in offline mode',
+      error: e,
+      stackTrace: st,
+    );
     return false;
   }
 }
 
-final Provider<bool> firebaseAvailableProvider = Provider<bool>((Ref ref) => false);
+final Provider<bool> firebaseAvailableProvider = Provider<bool>(
+  (Ref ref) => false,
+);

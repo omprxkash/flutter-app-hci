@@ -37,11 +37,9 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _isSubmitting = true);
 
-    final Result<AppUser, Failure> r =
-        await ref.read(authControllerProvider.notifier).doctorSignIn(
-              email: _email.text.trim(),
-              password: _password.text,
-            );
+    final Result<AppUser, Failure> r = await ref
+        .read(authControllerProvider.notifier)
+        .doctorSignIn(email: _email.text.trim(), password: _password.text);
 
     if (!mounted) return;
     setState(() => _isSubmitting = false);
@@ -60,8 +58,7 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
       prefixIcon: Icon(icon, size: 20, color: AppColors.lightTextSecondary),
       filled: true,
       fillColor: const Color(0xFFF7FAFC),
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
@@ -99,16 +96,20 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: Color(0xFF0A0A0A)),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Color(0xFF0A0A0A),
+                  ),
                   onPressed: () => context.pop(),
                 ),
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 16,
+                ),
                 child: Center(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 480),
@@ -165,24 +166,25 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
                             controller: _password,
                             obscureText: _obscure,
                             autofillHints: const <String>[
-                              AutofillHints.password
+                              AutofillHints.password,
                             ],
-                            decoration: _inputDecor(
-                              label: 'Password',
-                              icon: Icons.lock_outline_rounded,
-                            ).copyWith(
-                              suffixIcon: IconButton(
-                                onPressed: () =>
-                                    setState(() => _obscure = !_obscure),
-                                icon: Icon(
-                                  _obscure
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: AppColors.lightTextSecondary,
-                                  size: 20,
+                            decoration:
+                                _inputDecor(
+                                  label: 'Password',
+                                  icon: Icons.lock_outline_rounded,
+                                ).copyWith(
+                                  suffixIcon: IconButton(
+                                    onPressed: () =>
+                                        setState(() => _obscure = !_obscure),
+                                    icon: Icon(
+                                      _obscure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: AppColors.lightTextSecondary,
+                                      size: 20,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
                             validator: Validators.password,
                           ),
                           if (_serverError != null) ...<Widget>[
@@ -200,8 +202,7 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
                             onPressed: _isSubmitting ? null : _signIn,
                             style: FilledButton.styleFrom(
                               backgroundColor: const Color(0xFF6C56FC),
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),

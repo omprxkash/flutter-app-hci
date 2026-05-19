@@ -71,17 +71,17 @@ class AppUser extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        id,
-        role,
-        displayName,
-        createdAt,
-        phone,
-        email,
-        age,
-        gender,
-        doctorId,
-        specialty,
-        licenseNumber,
-        preferredLocale,
-      ];
+    id,
+    role,
+    displayName,
+    createdAt,
+    phone,
+    email,
+    age,
+    gender,
+    doctorId,
+    specialty,
+    licenseNumber,
+    preferredLocale,
+  ];
 }

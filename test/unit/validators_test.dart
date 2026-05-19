@@ -89,24 +89,19 @@ void main() {
 
   group('Validators.compose', () {
     test('returns first non-null error in order', () {
-      final String? result = Validators.compose(
-        '',
-        <String? Function(String?)>[
-          (String? v) => Validators.required(v, label: 'Name'),
-          (String? v) => Validators.minLength(v, 2, label: 'Name'),
-        ],
-      );
+      final String? result = Validators.compose('', <String? Function(String?)>[
+        (String? v) => Validators.required(v, label: 'Name'),
+        (String? v) => Validators.minLength(v, 2, label: 'Name'),
+      ]);
       expect(result, contains('required'));
     });
 
     test('returns null when all pass', () {
-      final String? result = Validators.compose(
-        'Anjali',
-        <String? Function(String?)>[
-          (String? v) => Validators.required(v, label: 'Name'),
-          (String? v) => Validators.minLength(v, 2, label: 'Name'),
-        ],
-      );
+      final String? result =
+          Validators.compose('Anjali', <String? Function(String?)>[
+            (String? v) => Validators.required(v, label: 'Name'),
+            (String? v) => Validators.minLength(v, 2, label: 'Name'),
+          ]);
       expect(result, isNull);
     });
   });

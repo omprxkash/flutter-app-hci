@@ -25,11 +25,14 @@ class InMemoryQuizRepository implements QuizRepository {
   final Uuid _uuid = const Uuid();
 
   @override
-  Future<Result<List<Quiz>, Failure>> listQuizzesForDoctor(String doctorId) async {
-    final List<Quiz> visible = _quizzes.values
-        .where((Quiz q) => q.isPreset || q.createdBy == doctorId)
-        .toList()
-      ..sort((Quiz a, Quiz b) => a.title.compareTo(b.title));
+  Future<Result<List<Quiz>, Failure>> listQuizzesForDoctor(
+    String doctorId,
+  ) async {
+    final List<Quiz> visible =
+        _quizzes.values
+            .where((Quiz q) => q.isPreset || q.createdBy == doctorId)
+            .toList()
+          ..sort((Quiz a, Quiz b) => a.title.compareTo(b.title));
     return Success<List<Quiz>, Failure>(visible);
   }
 
@@ -43,14 +46,17 @@ class InMemoryQuizRepository implements QuizRepository {
   @override
   Future<Result<Quiz, Failure>> getQuiz(String quizId) async {
     final Quiz? q = _quizzes[quizId];
-    if (q == null) return const Err<Quiz, Failure>(NotFoundFailure('Quiz not found.'));
+    if (q == null)
+      return const Err<Quiz, Failure>(NotFoundFailure('Quiz not found.'));
     return Success<Quiz, Failure>(q);
   }
 
   @override
   Future<Result<Quiz, Failure>> saveQuiz(Quiz quiz) async {
     if (quiz.isPreset) {
-      return const Err<Quiz, Failure>(PermissionFailure('Preset quizzes cannot be edited.'));
+      return const Err<Quiz, Failure>(
+        PermissionFailure('Preset quizzes cannot be edited.'),
+      );
     }
     final Quiz toSave = quiz.id.isEmpty
         ? Quiz(
@@ -71,9 +77,12 @@ class InMemoryQuizRepository implements QuizRepository {
   @override
   Future<Result<void, Failure>> deleteQuiz(String quizId) async {
     final Quiz? q = _quizzes[quizId];
-    if (q == null) return const Err<void, Failure>(NotFoundFailure('Quiz not found.'));
+    if (q == null)
+      return const Err<void, Failure>(NotFoundFailure('Quiz not found.'));
     if (q.isPreset) {
-      return const Err<void, Failure>(PermissionFailure('Preset quizzes cannot be deleted.'));
+      return const Err<void, Failure>(
+        PermissionFailure('Preset quizzes cannot be deleted.'),
+      );
     }
     _quizzes.remove(quizId);
     return const Success<void, Failure>(null);
@@ -81,27 +90,41 @@ class InMemoryQuizRepository implements QuizRepository {
 
   @override
   Stream<List<Assignment>> watchAssignmentsForPatient(String patientId) {
-    final StreamController<List<Assignment>> controller =
-        _patientStreams.putIfAbsent(patientId, () => StreamController<List<Assignment>>.broadcast());
+    final StreamController<List<Assignment>> controller = _patientStreams
+        .putIfAbsent(
+          patientId,
+          () => StreamController<List<Assignment>>.broadcast(),
+        );
     scheduleMicrotask(() => controller.add(_forPatient(patientId)));
     return controller.stream;
   }
 
   @override
   Stream<List<Assignment>> watchAssignmentsForDoctor(String doctorId) {
-    final StreamController<List<Assignment>> controller =
-        _doctorStreams.putIfAbsent(doctorId, () => StreamController<List<Assignment>>.broadcast());
+    final StreamController<List<Assignment>> controller = _doctorStreams
+        .putIfAbsent(
+          doctorId,
+          () => StreamController<List<Assignment>>.broadcast(),
+        );
     scheduleMicrotask(() => controller.add(_forDoctor(doctorId)));
     return controller.stream;
   }
 
   List<Assignment> _forPatient(String patientId) =>
-      _assignments.values.where((Assignment a) => a.patientId == patientId).toList()
-        ..sort((Assignment a, Assignment b) => b.assignedAt.compareTo(a.assignedAt));
+      _assignments.values
+          .where((Assignment a) => a.patientId == patientId)
+          .toList()
+        ..sort(
+          (Assignment a, Assignment b) => b.assignedAt.compareTo(a.assignedAt),
+        );
 
   List<Assignment> _forDoctor(String doctorId) =>
-      _assignments.values.where((Assignment a) => a.doctorId == doctorId).toList()
-        ..sort((Assignment a, Assignment b) => b.assignedAt.compareTo(a.assignedAt));
+      _assignments.values
+          .where((Assignment a) => a.doctorId == doctorId)
+          .toList()
+        ..sort(
+          (Assignment a, Assignment b) => b.assignedAt.compareTo(a.assignedAt),
+        );
 
   void _notify(String patientId, String doctorId) {
     _patientStreams[patientId]?.add(_forPatient(patientId));
@@ -109,16 +132,23 @@ class InMemoryQuizRepository implements QuizRepository {
   }
 
   @override
-  Future<Result<Assignment, Failure>> getAssignment(String patientId, String assignmentId) async {
+  Future<Result<Assignment, Failure>> getAssignment(
+    String patientId,
+    String assignmentId,
+  ) async {
     final Assignment? a = _assignments[assignmentId];
     if (a == null || a.patientId != patientId) {
-      return const Err<Assignment, Failure>(NotFoundFailure('Assignment not found.'));
+      return const Err<Assignment, Failure>(
+        NotFoundFailure('Assignment not found.'),
+      );
     }
     return Success<Assignment, Failure>(a);
   }
 
   @override
-  Future<Result<Assignment, Failure>> createAssignment(Assignment assignment) async {
+  Future<Result<Assignment, Failure>> createAssignment(
+    Assignment assignment,
+  ) async {
     final Assignment fresh = assignment.id.isEmpty
         ? Assignment(
             id: _uuid.v4(),
@@ -138,9 +168,13 @@ class InMemoryQuizRepository implements QuizRepository {
   }
 
   @override
-  Future<Result<Assignment, Failure>> updateAssignment(Assignment assignment) async {
+  Future<Result<Assignment, Failure>> updateAssignment(
+    Assignment assignment,
+  ) async {
     if (!_assignments.containsKey(assignment.id)) {
-      return const Err<Assignment, Failure>(NotFoundFailure('Assignment not found.'));
+      return const Err<Assignment, Failure>(
+        NotFoundFailure('Assignment not found.'),
+      );
     }
     _assignments[assignment.id] = assignment;
     _notify(assignment.patientId, assignment.doctorId);

@@ -32,19 +32,38 @@ class PatientProfileScreen extends ConsumerWidget {
                 radius: 48,
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 child: Text(
-                  user.displayName.isNotEmpty ? user.displayName[0].toUpperCase() : '?',
-                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+                  user.displayName.isNotEmpty
+                      ? user.displayName[0].toUpperCase()
+                      : '?',
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               Center(
-                child: Text(user.displayName,
-                    style: Theme.of(context).textTheme.headlineMedium),
+                child: Text(
+                  user.displayName,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
               ),
               const SizedBox(height: 24),
-              _InfoTile(icon: Icons.phone, label: 'Phone', value: user.phone ?? '—'),
-              _InfoTile(icon: Icons.cake_outlined, label: 'Age', value: user.age?.toString() ?? '—'),
-              _InfoTile(icon: Icons.wc, label: 'Gender', value: user.gender ?? '—'),
+              _InfoTile(
+                icon: Icons.phone,
+                label: 'Phone',
+                value: user.phone ?? '—',
+              ),
+              _InfoTile(
+                icon: Icons.cake_outlined,
+                label: 'Age',
+                value: user.age?.toString() ?? '—',
+              ),
+              _InfoTile(
+                icon: Icons.wc,
+                label: 'Gender',
+                value: user.gender ?? '—',
+              ),
               if (user.doctorId != null)
                 _InfoTile(
                   icon: Icons.medical_services_outlined,
@@ -64,7 +83,8 @@ class PatientProfileScreen extends ConsumerWidget {
                 icon: Icons.logout_rounded,
                 onPressed: () async {
                   await ref.read(authControllerProvider.notifier).signOut();
-                  if (context.mounted) context.goNamed(RouteNames.roleSelection);
+                  if (context.mounted)
+                    context.goNamed(RouteNames.roleSelection);
                 },
               ),
             ],
@@ -76,7 +96,11 @@ class PatientProfileScreen extends ConsumerWidget {
 }
 
 class _InfoTile extends StatelessWidget {
-  const _InfoTile({required this.icon, required this.label, required this.value});
+  const _InfoTile({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   final IconData icon;
   final String label;
@@ -150,8 +174,11 @@ class _ConnectDoctorTile extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded,
-                  color: Color(0xFF2E5BFF), size: 20),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Color(0xFF2E5BFF),
+                size: 20,
+              ),
             ],
           ),
         ),
@@ -238,7 +265,9 @@ class _ConnectDoctorTile extends ConsumerWidget {
                           : () async {
                               final String code = codeCtrl.text.trim();
                               if (code.isEmpty) {
-                                setState(() => error = 'Please enter the invite code.');
+                                setState(
+                                  () => error = 'Please enter the invite code.',
+                                );
                                 return;
                               }
                               setState(() {
@@ -248,9 +277,7 @@ class _ConnectDoctorTile extends ConsumerWidget {
 
                               final result = await ref
                                   .read(authControllerProvider.notifier)
-                                  .updateProfile(
-                                    user.copyWith(doctorId: code),
-                                  );
+                                  .updateProfile(user.copyWith(doctorId: code));
 
                               if (!ctx.mounted) return;
 
@@ -264,7 +291,8 @@ class _ConnectDoctorTile extends ConsumerWidget {
                               } else {
                                 setState(() {
                                   loading = false;
-                                  error = 'Code not recognised. Check with your doctor.';
+                                  error =
+                                      'Code not recognised. Check with your doctor.';
                                 });
                               }
                             },

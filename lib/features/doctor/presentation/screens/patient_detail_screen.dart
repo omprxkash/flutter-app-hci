@@ -20,13 +20,21 @@ class PatientDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<AppUser?> patientAsync = ref.watch(patientByIdProvider(patientId));
+    final AsyncValue<AppUser?> patientAsync = ref.watch(
+      patientByIdProvider(patientId),
+    );
     return patientAsync.when(
       loading: () => const AppScaffold(body: LoadingIndicator()),
-      error: (Object e, _) => AppScaffold(title: 'Patient', body: Center(child: Text(e.toString()))),
+      error: (Object e, _) => AppScaffold(
+        title: 'Patient',
+        body: Center(child: Text(e.toString())),
+      ),
       data: (AppUser? patient) {
         if (patient == null) {
-          return const AppScaffold(title: 'Patient', body: EmptyState(title: 'Patient not found'));
+          return const AppScaffold(
+            title: 'Patient',
+            body: EmptyState(title: 'Patient not found'),
+          );
         }
         return _PatientDetail(patient: patient);
       },
@@ -41,8 +49,9 @@ class _PatientDetail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<QuizResponse>> async =
-        ref.watch(patientResponsesProvider(patient.id));
+    final AsyncValue<List<QuizResponse>> async = ref.watch(
+      patientResponsesProvider(patient.id),
+    );
 
     return AppScaffold(
       title: patient.displayName,
@@ -57,17 +66,26 @@ class _PatientDetail extends ConsumerWidget {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 32,
-                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                    child: Text(patient.displayName[0].toUpperCase(),
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer,
+                    child: Text(
+                      patient.displayName[0].toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(patient.displayName,
-                            style: Theme.of(context).textTheme.titleLarge),
+                        Text(
+                          patient.displayName,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                         const SizedBox(height: 4),
                         Text(
                           '${patient.age ?? "—"} years • ${patient.gender ?? "—"} • ${patient.phone ?? "—"}',
@@ -81,7 +99,10 @@ class _PatientDetail extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          Text('Assessment timeline', style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            'Assessment timeline',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 12),
           async.when(
             loading: () => const LoadingIndicator(),
@@ -113,7 +134,9 @@ class _PatientDetail extends ConsumerWidget {
                           trailing: const Icon(Icons.chevron_right_rounded),
                           onTap: () => context.pushNamed(
                             RouteNames.reviewResponse,
-                            pathParameters: <String, String>{'responseId': r.id},
+                            pathParameters: <String, String>{
+                              'responseId': r.id,
+                            },
                           ),
                         ),
                       ),

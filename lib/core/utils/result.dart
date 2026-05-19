@@ -19,28 +19,28 @@ sealed class Result<T, F extends Failure> {
 
   /// Map the success value. Failures pass through unchanged.
   Result<R, F> map<R>(R Function(T value) f) => switch (this) {
-        Success<T, F>(:final T data) => Success<R, F>(f(data)),
-        Err<T, F>(:final F failure) => Err<R, F>(failure),
-      };
+    Success<T, F>(:final T data) => Success<R, F>(f(data)),
+    Err<T, F>(:final F failure) => Err<R, F>(failure),
+  };
 
   /// Chain another `Result`-returning operation.
   Result<R, F> flatMap<R>(Result<R, F> Function(T value) f) => switch (this) {
-        Success<T, F>(:final T data) => f(data),
-        Err<T, F>(:final F failure) => Err<R, F>(failure),
-      };
+    Success<T, F>(:final T data) => f(data),
+    Err<T, F>(:final F failure) => Err<R, F>(failure),
+  };
 
   bool get isOk => this is Success<T, F>;
   bool get isErr => this is Err<T, F>;
 
   T? get dataOrNull => switch (this) {
-        Success<T, F>(:final T data) => data,
-        Err<T, F>() => null,
-      };
+    Success<T, F>(:final T data) => data,
+    Err<T, F>() => null,
+  };
 
   F? get failureOrNull => switch (this) {
-        Success<T, F>() => null,
-        Err<T, F>(:final F failure) => failure,
-      };
+    Success<T, F>() => null,
+    Err<T, F>(:final F failure) => failure,
+  };
 }
 
 final class Success<T, F extends Failure> extends Result<T, F> {

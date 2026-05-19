@@ -28,7 +28,12 @@ class _PatientRegistrationScreenState
   bool _isSubmitting = false;
   String? _serverError;
 
-  static const List<String> _genders = <String>['female', 'male', 'other', 'prefer not to say'];
+  static const List<String> _genders = <String>[
+    'female',
+    'male',
+    'other',
+    'prefer not to say',
+  ];
 
   @override
   void dispose() {
@@ -43,8 +48,9 @@ class _PatientRegistrationScreenState
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _isSubmitting = true);
 
-    final Result<String, Failure> r =
-        await ref.read(authControllerProvider.notifier).sendOtp(_phone.text.trim());
+    final Result<String, Failure> r = await ref
+        .read(authControllerProvider.notifier)
+        .sendOtp(_phone.text.trim());
 
     if (!mounted) return;
     setState(() => _isSubmitting = false);
@@ -97,7 +103,8 @@ class _PatientRegistrationScreenState
                   prefixIcon: Icon(Icons.person_outline_rounded),
                 ),
                 validator: (String? v) =>
-                    Validators.required(v, label: 'Name') ?? Validators.minLength(v, 2, label: 'Name'),
+                    Validators.required(v, label: 'Name') ??
+                    Validators.minLength(v, 2, label: 'Name'),
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -135,10 +142,12 @@ class _PatientRegistrationScreenState
                         prefixIcon: Icon(Icons.wc_rounded),
                       ),
                       items: _genders
-                          .map((String g) => DropdownMenuItem<String>(
-                                value: g,
-                                child: Text(g[0].toUpperCase() + g.substring(1)),
-                              ))
+                          .map(
+                            (String g) => DropdownMenuItem<String>(
+                              value: g,
+                              child: Text(g[0].toUpperCase() + g.substring(1)),
+                            ),
+                          )
                           .toList(),
                       onChanged: (String? v) {
                         if (v != null) setState(() => _gender = v);
