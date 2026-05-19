@@ -1,129 +1,102 @@
 # MedQuiz
 
-[![CI](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml)
-[![Flutter](https://img.shields.io/badge/Flutter-3.37+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![CI](https://github.com/omprxkash/medquiz/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/medquiz/actions/workflows/ci.yml)
+[![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A Flutter app for running psychiatric screening questionnaires between doctors and their patients — PHQ-9, GAD-7, MMSE, or custom ones the doctor builds.
+A Flutter app that lets doctors assign psychiatric screening questionnaires to their patients — think PHQ-9, GAD-7, MMSE — and review the results without digging through paper forms. Built as an HCI project, but designed to feel like something you'd actually want to use.
 
 ---
 
-## The idea
+## What it does
 
-The flow is straightforward:
+The whole thing is a simple loop:
 
-1. **Doctor logs in** → sees a dashboard with their patients and any responses waiting for review
-2. **Doctor assigns a quiz** to a patient (PHQ-9 for depression screening, GAD-7 for anxiety, MMSE for cognitive screening, or a custom one they build)
-3. **Patient opens the app** → sees the assigned quiz on their home screen, taps to fill it out
-4. **Patient submits** → the app auto-scores against the published rubric and shows the result with a severity band
-5. **Doctor reviews** → can see the patient's answers, adjust the score if their clinical judgment says so, and leave notes with a follow-up date
+A doctor opens the app, sees their patients, and assigns a quiz. The patient gets it on their home screen, fills it in, and submits. The app scores it automatically and shows them where they land on the severity scale. The doctor then reviews it, can adjust the score if their gut says the numbers don't tell the full story, and adds follow-up notes.
 
-That's the whole loop. Nothing fancy — just getting paper forms off clipboards and onto phones.
+That's it. No complex setup, no backend required to try it — everything runs in-memory by default.
 
 ---
 
-## Screenshots
+## Running it locally
 
-| Patient home | Quiz result | Doctor dashboard |
-|---|---|---|
-| *docs/screenshots/06-patient-home.png* | *docs/screenshots/08-quiz-result.png* | *docs/screenshots/03-doctor-dashboard.png* |
-
-*(Screenshots coming — run the app and you'll see it)*
-
----
-
-## Where the data lives
-
-By default everything is **in-memory**. That means:
-
-- No database setup needed to run it
-- All data is gone when you restart the app
-- Perfect for trying it out, useless for production
-
-If you want real persistence, run `flutterfire configure` in the project root and replace `lib/core/config/firebase_options.dart` with the generated file. The app will automatically switch to Firestore. Full steps are in [`docs/setup.md`](docs/setup.md).
-
-### What's seeded on startup
-
-| Demo account | Details |
-|---|---|
-| Doctor | Dr. Demo · General Medicine · `doctor@demo.local` / `password123` |
-| Patient 1 | Anjali Demo · 34 F · linked to Dr. Demo |
-| Patient 2 | Rahul Patel · 52 M · linked to Dr. Demo |
-| Patient 3 | Maria Lopez · 41 F · linked to Dr. Demo |
-
-Quizzes available out of the box: PHQ-9, GAD-7, MMSE. The doctor can also build custom questionnaires from six question types.
-
----
-
-## Logging in
-
-**Doctor:** email + password. Use `doctor@demo.local` / `password123` for the demo account.
-
-**Patient:** phone number + 6-digit OTP.
-
-> **Important:** in the default in-memory mode, no SMS is ever sent. The OTP screen accepts any 6-digit number — just type `123456` and it'll work. This is intentional for demo use. Once you wire up Firebase and a real SMS provider, the verification becomes real.
-
----
-
-## Run it
-
-You need [Flutter 3.37+](https://docs.flutter.dev/get-started/install).
+You'll need Flutter 3.44+. Then:
 
 ```bash
-git clone https://github.com/omprxkash/flutter-app-hci.git
-cd flutter-app-hci
+git clone https://github.com/omprxkash/medquiz.git
+cd medquiz
 flutter pub get
-flutter run -d chrome        # or -d windows, -d android, etc.
+flutter run -d chrome
 ```
 
-Both roles have a bottom navigation bar. Patient gets Home / History / Profile. Doctor gets Dashboard / Library / Profile.
+For web at a specific port:
+```bash
+flutter run -d web-server --web-port 8765
+```
 
 ---
 
-## Quiz scoring
+## Demo credentials
 
-| Quiz | Items | Range | Bands |
-|---|---|---|---|
-| PHQ-9 (depression) | 9 | 0–27 | Minimal / Mild / Moderate / Moderately severe / Severe |
-| GAD-7 (anxiety) | 7 | 0–21 | Minimal / Mild / Moderate / Severe |
-| MMSE (cognitive) | 30 tasks | 0–30 | Normal / Mild impairment / Moderate / Severe |
+**Doctor login**
+- Email: `doctor@demo.local`
+- Password: `password123`
 
-Scoring follows published rubrics. Covered by unit tests in `test/unit/`. The doctor can always override the auto-score — arithmetic doesn't beat clinical judgment.
+**Patient login**
+Tap any name on the list — Anjali, Rahul, or Maria. No password needed in demo mode.
 
----
-
-## Design
-
-The UI is light and clean — `#F7FAFC` background, Poppins typography, colorful accent tiles for stats, and left-bordered cards to signal status at a glance. Inspired by Rocket Money's dashboard (bold full-color stat tiles) and Informed News (typography-first reading flow). No dark gradient prototypes left.
-
-- Patient home: deep indigo→purple gradient header with inline "Pending / Completed" stat pills
-- Doctor dashboard: Q9 suicidal-ideation alert banner, responsive 2-column patient grid on tablet/desktop (≥720px)
-- Quiz result: full-color score hero card tinted by severity band
-- Take quiz: clean white reading layout with a purple progress bar
-- Tokens centralized in `lib/core/theme/`
+> The OTP screen in patient registration accepts any 6-digit code (`123456` works). No real SMS is sent unless you plug in Firebase Auth.
 
 ---
 
-## What I'm thinking of adding next
+## Quizzes included
 
-- ~~**PHQ-9 Q9 alert**~~ — done (red banner on doctor dashboard when any pending review has Q9 > 0)
-- **Reminder notifications** — nudge patients who have a pending quiz and haven't opened it in a day or two
-- **Progress chart** — sparkline of the last 6 scores on the patient's doctor-detail screen, so trends are visible at a glance
-- **Multi-doctor support** — right now each patient has one `doctorId`; changing that to a list would let a patient be shared across a care team
-- **Real SMS/email verification** — straightforward once Firebase Auth is wired up; the OTP flow is already in place
-- **Audit log for score overrides** — track when a doctor changes the auto-score and by how much, stored alongside the review
+| Quiz | What it screens for | Score range |
+|---|---|---|
+| PHQ-9 | Depression | 0–27 |
+| GAD-7 | Anxiety | 0–21 |
+| MMSE | Cognitive impairment | 0–30 |
+
+Scoring follows the published rubrics. Doctors can also build their own questionnaires from six question types (text, single choice, multi-select, scale, number, yes/no).
+
+One thing worth mentioning: if a PHQ-9 response has Q9 > 0 (the suicidal ideation question), the doctor dashboard shows a red alert banner at the top. That one felt important to get right.
+
+---
+
+## Where data lives
+
+Everything is in-memory by default — no database, no Firebase project needed to run it. Data resets on restart, which is fine for trying things out.
+
+If you want real persistence, run `flutterfire configure` and replace `lib/core/config/firebase_options.dart` with the generated file. The app picks it up automatically.
 
 ---
 
 ## Stack
 
-- Flutter 3.37+ / Dart 3.10+
-- Riverpod 3 (state management)
-- go_router 17 (routing, `StatefulShellRoute` for persistent bottom nav)
-- Firebase Auth + Firestore (optional; in-memory by default)
-- fl_chart, google_fonts, intl
+- **Flutter 3.44 / Dart 3.10**
+- **Riverpod 3** — state management, one provider file per feature
+- **go_router 17** — navigation with `StatefulShellRoute` for persistent bottom nav
+- **google_fonts** — Poppins throughout
+- **Firebase Auth + Firestore** — optional; swappable with the in-memory layer
 
-Clean per-feature architecture — every feature (`auth`, `doctor`, `patient`, `quiz`) has consistent `domain/` (entities + abstract repos), `data/` (in-memory + Firebase implementations side by side), and `presentation/` (providers + screens + widgets) layers. Domain has zero Flutter imports. More in [`docs/architecture.md`](docs/architecture.md).
+The architecture is feature-first: `auth`, `doctor`, `patient`, and `quiz` each have their own `domain/`, `data/`, and `presentation/` folders. Domain layer has zero Flutter imports. The in-memory and Firebase data implementations live side by side in `data/` so swapping them is a one-line change in the provider.
+
+---
+
+## Design
+
+Clean and light — `#F7FAFC` background, Poppins, colorful stat tiles, left-bordered list cards that signal status at a glance. The patient home has a deep indigo-to-purple header with pending/completed stat pills. The quiz result screen uses a full-color hero card tinted by the severity band — so a severe score looks visually different from a minimal one without needing to read the label.
+
+Tablet/desktop gets a 2-column patient grid on the doctor dashboard at ≥720px.
+
+---
+
+## What's next
+
+- Reminder notifications for patients who haven't started an assigned quiz in a day or two
+- A score trend sparkline on the patient detail screen (last 6 results)
+- Audit log when a doctor overrides the auto-score
+- Real SMS verification once Firebase Auth is wired up
 
 ---
 

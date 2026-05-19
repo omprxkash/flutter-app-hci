@@ -1,5 +1,5 @@
-import '../../../../core/constants/demo_patients.dart';
-import '../../../auth/domain/entities/app_user.dart';
+import '../../../core/constants/demo_patients.dart';
+import '../../auth/domain/entities/app_user.dart';
 import '../domain/repositories/patient_repository.dart';
 
 class InMemoryPatientRepository implements PatientRepository {
