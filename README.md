@@ -9,9 +9,15 @@ Built for an HCI course, but designed like something you'd actually want to use.
 
 ---
 
-## Welcome screen
+## Screenshots
 
-![Welcome screen](images/welcome_login_screen.png)
+| Welcome / Login | Select Profile |
+|---|---|
+| ![Welcome screen](images/welcome_login_screen.png) | ![Profile select](images/profile_select_screen.png) |
+
+| Doctor Login | Profile Check |
+|---|---|
+| ![Doctor login](images/doctor_login.png) | ![Profile check](images/profile_check.png) |
 
 ---
 
