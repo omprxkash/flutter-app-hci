@@ -84,7 +84,7 @@ class _LikertButton extends StatelessWidget {
                 duration: const Duration(milliseconds: 150),
                 child: Icon(
                   selected
-                      ? Icons.check_circle_rounded
+                      ? Icons.radio_button_checked
                       : Icons.radio_button_unchecked,
                   key: ValueKey<bool>(selected),
                   color: selected
