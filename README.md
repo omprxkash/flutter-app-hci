@@ -9,12 +9,6 @@ Built for an HCI course, but designed to actually be usable.
 
 ---
 
-## Screenshots
-
-<img src="screenshots/welcome_screen.png" alt="Welcome screen" width="320" />
-
----
-
 ## How it works
 
 It's a pretty tight loop:
