@@ -93,6 +93,3 @@ A few things still on the list:
 
 ---
 
-## License
-
-MIT. See [LICENSE](LICENSE).
