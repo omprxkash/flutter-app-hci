@@ -57,7 +57,7 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
       labelText: label,
       prefixIcon: Icon(icon, size: 20, color: AppColors.lightTextSecondary),
       filled: true,
-      fillColor: const Color(0xFFF7FAFC),
+      fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -85,7 +85,7 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7FAFC),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -223,16 +223,6 @@ class _DoctorLoginScreenState extends ConsumerState<DoctorLoginScreen> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                          ),
-                          const SizedBox(height: 20),
-                          Center(
-                            child: Text(
-                              'Demo: doctor@demo.local / password123',
-                              style: TextStyle(
-                                color: AppColors.lightTextSecondary,
-                                fontSize: 13,
-                              ),
-                            ),
                           ),
                         ],
                       ),

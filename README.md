@@ -43,17 +43,6 @@ flutter run -d web-server --web-port 8765
 
 ---
 
-## Try it out
-
-**As a doctor:**
-- Email: `doctor@demo.local`
-- Password: `password123`
-
-**As a patient:**
-Just tap any name on the list — Anjali, Rahul, or Maria. No password needed in demo mode.
-
-> Patient registration has an OTP screen. Any 6-digit code works (`123456` is fine). No real SMS is sent unless you wire up Firebase Auth.
-
 ---
 
 ## Quizzes included

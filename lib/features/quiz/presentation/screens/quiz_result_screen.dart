@@ -53,7 +53,7 @@ class QuizResultScreen extends ConsumerWidget {
         .value;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7FAFC),
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: <Widget>[
           // ── Clean top bar ─────────────────────────────────────────
@@ -308,7 +308,7 @@ class QuizResultScreen extends ConsumerWidget {
                             width: double.infinity,
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF7FAFC),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(

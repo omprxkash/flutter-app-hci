@@ -179,7 +179,7 @@ class _TakeQuizScreenState extends ConsumerState<TakeQuizScreen> {
     const Color accentColor = Color(0xFF6C56FC);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7FAFC),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
