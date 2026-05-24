@@ -11,7 +11,7 @@ Built for an HCI course, but designed like something you'd actually want to use.
 
 ## Welcome screen
 
-![Welcome screen](images/welcome_login_screen.png)
+![Welcome screen](screenshots/welcome_login_screen.png)
 
 ---
 
