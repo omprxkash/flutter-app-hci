@@ -55,10 +55,6 @@ class Validators {
   static String? password(String? value) {
     if (value == null || value.isEmpty) return 'Password is required.';
     if (value.length < 8) return 'Password must be at least 8 characters.';
-    if (!value.contains(RegExp('[A-Z]')))
-      return 'Password must contain an uppercase letter.';
-    if (!value.contains(RegExp('[0-9]')))
-      return 'Password must contain a digit.';
     return null;
   }
 

@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml/badge.svg)](https://github.com/omprxkash/flutter-app-hci/actions/workflows/ci.yml)
 [![Flutter](https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Psychiatric screening, without the clipboard. MedQuiz lets doctors send PHQ-9s, GAD-7s, and MMSEs straight to patients' phones — patients fill them out, the app scores everything automatically, and doctors review results (and can override them when the numbers miss something the conversation didn't).
 
@@ -10,6 +9,11 @@ Built for an HCI course, but designed to actually be usable.
 
 ---
 
+## Screenshots
+
+<img src="screenshots/welcome_screen.png" alt="Welcome screen" width="320" />
+
+---
 
 ## How it works
 
