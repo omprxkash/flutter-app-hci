@@ -9,6 +9,10 @@ Built for an HCI course, but designed to actually be usable.
 
 ---
 
+![Welcome screen](screenshots/welcome_screen.png)
+
+---
+
 ## How it works
 
 It's a pretty tight loop:
