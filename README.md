@@ -11,13 +11,14 @@ Built for an HCI course, but designed like something you'd actually want to use.
 
 ## Screenshots
 
-| Welcome / Login | Select Profile |
-|---|---|
-| ![Welcome screen](images/welcome_login_screen.png) | ![Profile select](images/profile_select_screen.png) |
-
-| Doctor Login | Profile Check |
-|---|---|
-| ![Doctor login](images/doctor_login.png) | ![Profile check](images/profile_check.png) |
+<table align="center">
+  <tr>
+    <td align="center"><img src="images/welcome_login_screen.png" width="200"/><br/><sub>Welcome / Login</sub></td>
+    <td align="center"><img src="images/profile_select_screen.png" width="200"/><br/><sub>Select Profile</sub></td>
+    <td align="center"><img src="images/doctor_login.png" width="200"/><br/><sub>Doctor Login</sub></td>
+    <td align="center"><img src="images/profile_check.png" width="200"/><br/><sub>Profile Check</sub></td>
+  </tr>
+</table>
 
 ---
 
