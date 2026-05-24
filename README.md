@@ -9,7 +9,9 @@ Built for an HCI course, but designed to actually be usable.
 
 ---
 
-![Welcome screen]()
+## Screenshots
+
+![Welcome screen](screenshots/welcome_screen.png)
 
 ---
 
@@ -42,8 +44,6 @@ Prefer a specific port?
 ```bash
 flutter run -d web-server --web-port 8765
 ```
-
----
 
 ---
 
@@ -90,4 +90,6 @@ The architecture is feature-first: `auth`, `doctor`, `patient`, and `quiz` each 
 
 ---
 
+## License
 
+MIT. See [LICENSE](LICENSE).
