@@ -90,6 +90,4 @@ The architecture is feature-first: `auth`, `doctor`, `patient`, and `quiz` each 
 
 ---
 
-## License
 
-MIT. See [LICENSE](LICENSE).
