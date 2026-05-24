@@ -79,18 +79,6 @@ The architecture is feature-first: `auth`, `doctor`, `patient`, and `quiz` each 
 
 ---
 
-## Design
-
-Light backgrounds (`#F7FAFC`), Poppins, colorful stat tiles, and left-bordered list cards that signal status at a glance. Heavily inspired by Rocket Money and acctual.com — the kind of UI that feels considered rather than assembled.
-
-A few specific choices:
-
-- The patient home has a deep indigo-to-purple header with inline stat pills for pending and completed quizzes
-- The quiz result screen uses a full-color hero card tinted by severity band — a severe score *looks* different from a minimal one, not just different text
-- The doctor dashboard goes two-column on tablets and wider screens (≥720px)
-
----
-
 ## What's next
 
 - Push notifications nudging patients who haven't started an assigned quiz after a day or two
