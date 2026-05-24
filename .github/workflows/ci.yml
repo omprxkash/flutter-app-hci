@@ -24,7 +24,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          cache: false
 
       - name: Install dependencies
         run: flutter pub get
@@ -63,7 +62,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          cache: false
 
       - name: Install dependencies
         run: flutter pub get
@@ -98,7 +96,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          cache: false
 
       - name: Install dependencies
         run: flutter pub get
